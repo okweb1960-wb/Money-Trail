@@ -4,7 +4,7 @@ Working title: **Money & Influence Tracker**. v1 case: **Glyphosate**.
 
 A nonpartisan web app that shows how money (lobbying, PAC and employee contributions) sits in time and in relationship to government decisions. It surfaces patterns ("worth a closer look") and never declares cause or corruption. Every fact links to a public primary source.
 
-> Status: Phase 0 (plan + data feasibility). Nothing in Phase 1 is built yet. See `FEASIBILITY.md` for what each source actually returned.
+> Status: Phase 1 built (see `PHASE1.md`). Phase 0 results: `FEASIBILITY.md`.
 
 ---
 

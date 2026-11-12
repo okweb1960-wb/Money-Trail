@@ -56,6 +56,7 @@ enum ReviewStatus {
   approved // a person approved this in data/review/*.csv
   proposed // machine-proposed, awaiting review
   rejected
+  screened_out // matched no screening term; not shown as case-related and not human-reviewed
 }
 
 enum ClaimStatus {

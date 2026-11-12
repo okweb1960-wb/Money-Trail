@@ -149,7 +149,7 @@ async function main() {
       const decision = actDec.get(activityKey(f.registrant.name, desc));
       const cls = classifyActivity(desc);
       const relevance = decision?.relevance ?? (cls.relevance === "general" ? "general" : cls.relevance);
-      const review = decision?.review ?? (cls.relevance === "general" ? "approved" : "proposed");
+      const review = decision?.review ?? (cls.relevance === "general" ? "screened_out" : "proposed");
       const lobbyistIds = (a.lobbyists ?? []).map((l: any) => `lda-lobbyist:${l.lobbyist.id}`);
       await prisma.activity.create({
         data: {
