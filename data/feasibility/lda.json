@@ -1,0 +1,1218 @@
+{
+  "source": "Senate LDA API",
+  "generated_at": "2026-11-12T22:47:12.444Z",
+  "window": {
+    "from": "2018-01-01",
+    "to": "2026-11-12"
+  },
+  "base_urls": [
+    "https://lda.gov/api/v1",
+    "https://lda.senate.gov/api/v1"
+  ],
+  "ok": true,
+  "checks": [
+    {
+      "name": "reachability https://lda.gov/api/v1",
+      "ok": true,
+      "detail": "HTTP 206, application/json",
+      "source_url": "https://lda.gov/api/v1/"
+    },
+    {
+      "name": "client search",
+      "ok": true,
+      "detail": "39 Bayer/Monsanto client-name variants kept, 5 excluded for human review"
+    },
+    {
+      "name": "LD-2 filings",
+      "ok": true,
+      "detail": "539 Bayer/Monsanto filings 2018-2026"
+    },
+    {
+      "name": "named lobbyists + covered positions",
+      "ok": true,
+      "detail": "186 distinct lobbyists; 131 list a covered (prior government) position"
+    },
+    {
+      "name": "glyphosate keyword screen",
+      "ok": true,
+      "detail": "466 lobbying activities mention at least one screening term"
+    },
+    {
+      "name": "LD-203 contributions",
+      "ok": true,
+      "detail": "223 LD-203 reports, 987 itemized contributions"
+    }
+  ],
+  "rate_limits": {
+    "observed_headers": "LDA API sent no X-RateLimit headers during this run.",
+    "documented": "Anonymous requests are throttled more tightly than requests with an API key (Authorization: Token <key>). This script waits 1.2s between requests and backs off on 429.",
+    "page_size_max": 25
+  },
+  "gaps": [
+    "lda.senate.gov returned a 'Site Under Maintenance' HTML page; lda.gov serves the same API. Store lda.gov URLs and re-check lda.senate.gov later.",
+    "Client names are free text and vary (e.g. 'BAYER CORPORATION (FKA MONSANTO COMPANY)'). Entity resolution needs a reviewed alias list; excluded names are listed for review.",
+    "In-house expenses and outside-firm income can overlap (an in-house total may already include payments to outside firms). Show them as separate series; do not sum them until the LDA guidance is checked.",
+    "Lobbying activity descriptions are short free text. The keyword screen finds candidates only; a human must confirm each match is about glyphosate before it is used as RECORD.",
+    "LD-2 reports give quarterly totals, not per-issue or per-day amounts. The timeline can only plot quarterly spend.",
+    "Covered positions are self-reported text. They can be shown verbatim and linked, but 'overlap with the client's industry' needs manual tagging."
+  ],
+  "findings": {
+    "base_used": "https://lda.gov/api/v1",
+    "client_name_variants": {
+      "included": [
+        "AKIN, GUMP, STRAUSS, HAUER & FELD ON BEHALF OF BAYER CORPORATION",
+        "BAYER CORP",
+        "BAYER CORP/AGRICULTURE DIVISION",
+        "BAYER CORP/CONSUMER CARE DIV",
+        "BAYER CORPORATION",
+        "BAYER CORPORATION (CONSOLIDATED REPORT)",
+        "BAYER CORPORATION (FKA MONSANTO COMPANY)",
+        "BAYER CORPORATION (FORMERLY KNOWN AS MONSANTO COMPANY)",
+        "BAYER CROP SCIENCE",
+        "BAYER CROPSCIENCE",
+        "BAYER CROPSCIENCE LP",
+        "BAYER HEALTHCARE",
+        "BAYER HEALTHCARE LLC",
+        "BAYER MATERIAL SCIENCE",
+        "BAYER MATERIAL SCIENCE LLC",
+        "BAYER MATERIALSCIENCE",
+        "BAYER MATERIALSCIENCE LLC",
+        "BAYER MATERIALSCIENCE, LLC",
+        "BAYER U.S. LLC",
+        "BAYER U.S., LLC",
+        "BAYER US LLC",
+        "CAPITOL COUNSEL, LLC ON BEHALF OF BAYER CORPORATION",
+        "CLOAKROOM ADVISORS ON BEHALF OF GEPHARDT GOV'T AFFAIRS ON BEHALF OF BAYER AG",
+        "GEPHARDT GOVERNMENT AFFAIRS ON BEHALF OF BAYER AG",
+        "GEPHARDT GROUP GOVERNMENT AFFAIRS, LLC ON BEHALF OF BAYER AG",
+        "GEPHARDT GROUP ON BEHALF OF BAYER AG",
+        "HUSCH BLACKWELL GOVERNMENT STRATEGIES ON BEHALF OF BAYER AG",
+        "MONSANTO",
+        "MONSANTO (SEARLE) CORP",
+        "MONSANTO CO",
+        "MONSANTO COMPANY",
+        "MONSANTO SEARLE",
+        "MONSANTO/THE AGRICULTURAL GROUP",
+        "THE BAYER CORPORATION",
+        "WILMER CUTLER PICKERING HALE & DORR LLP (ON BEHALF OF MONSANTO COMPANY)",
+        "WILMER CUTLER PICKERING HALE & DORR LLP (ON BEHALF OF MONSANTO)",
+        "WILMER CUTLER PICKERING HALE AND DORR LLP (ON BEHALF OF MONSANTO COMPANY)",
+        "WILMER CUTLER PICKERING HALE AND DORR LLP (ON BEHALF OF MONSANTO)",
+        "WILMER CUTLER PICKERING HALE AND DORR LLP OBO MONSANTO"
+      ],
+      "excluded_for_review": [
+        "BAYER",
+        "BAYER (FORMERLY KNOWN AS CONCEPTUS)",
+        "BAYER CLOTHING GROUP",
+        "BAYER DIAGNOSTICS",
+        "DAVID BAYER AND BAYPOINTE AT NAPLES CAY"
+      ]
+    },
+    "filings_per_year": {
+      "2018": 92,
+      "2019": 67,
+      "2020": 55,
+      "2021": 50,
+      "2022": 54,
+      "2023": 53,
+      "2024": 48,
+      "2025": 68,
+      "2026": 52
+    },
+    "filing_types": {
+      "Q1": 121,
+      "Q2": 118,
+      "Q3": 118,
+      "Q4": 99,
+      "RR": 21,
+      "4T": 11,
+      "1A": 9,
+      "2T": 7,
+      "3A": 5,
+      "Q3Y": 5,
+      "RA": 4,
+      "2A": 3,
+      "Q1Y": 3,
+      "1TY": 3,
+      "4A": 3,
+      "1T": 2,
+      "Q4Y": 2,
+      "Q2Y": 1,
+      "3T": 1,
+      "3TY": 1,
+      "2TY": 1,
+      "4TY": 1
+    },
+    "quarterly_amounts": {
+      "2018-Q1": {
+        "in_house_expenses": 4490000,
+        "outside_firm_income": 1330000,
+        "outside_firms": 19,
+        "filings": 21
+      },
+      "2018-Q2": {
+        "in_house_expenses": 2660000,
+        "outside_firm_income": 1210000,
+        "outside_firms": 19,
+        "filings": 21
+      },
+      "2018-Q3": {
+        "in_house_expenses": 2430000,
+        "outside_firm_income": 930000,
+        "outside_firms": 17,
+        "filings": 19
+      },
+      "2018-Q4": {
+        "in_house_expenses": 2130000,
+        "outside_firm_income": 770000,
+        "outside_firms": 17,
+        "filings": 19
+      },
+      "2019-Q1": {
+        "in_house_expenses": 2420000,
+        "outside_firm_income": 625000,
+        "outside_firms": 14,
+        "filings": 17
+      },
+      "2019-Q2": {
+        "in_house_expenses": 2610000,
+        "outside_firm_income": 595000,
+        "outside_firms": 12,
+        "filings": 14
+      },
+      "2019-Q3": {
+        "in_house_expenses": 2110000,
+        "outside_firm_income": 635000,
+        "outside_firms": 12,
+        "filings": 14
+      },
+      "2019-Q4": {
+        "in_house_expenses": 1910000,
+        "outside_firm_income": 585000,
+        "outside_firms": 11,
+        "filings": 12
+      },
+      "2020-Q1": {
+        "in_house_expenses": 1960000,
+        "outside_firm_income": 605000,
+        "outside_firms": 12,
+        "filings": 13
+      },
+      "2020-Q2": {
+        "in_house_expenses": 1750000,
+        "outside_firm_income": 635000,
+        "outside_firms": 12,
+        "filings": 13
+      },
+      "2020-Q3": {
+        "in_house_expenses": 1430000,
+        "outside_firm_income": 615000,
+        "outside_firms": 12,
+        "filings": 13
+      },
+      "2020-Q4": {
+        "in_house_expenses": 1370000,
+        "outside_firm_income": 635000,
+        "outside_firms": 12,
+        "filings": 13
+      },
+      "2021-Q1": {
+        "in_house_expenses": 1760000,
+        "outside_firm_income": 575000,
+        "outside_firms": 11,
+        "filings": 13
+      },
+      "2021-Q2": {
+        "in_house_expenses": 1400000,
+        "outside_firm_income": 575000,
+        "outside_firms": 11,
+        "filings": 12
+      },
+      "2021-Q3": {
+        "in_house_expenses": 1510000,
+        "outside_firm_income": 575000,
+        "outside_firms": 11,
+        "filings": 12
+      },
+      "2021-Q4": {
+        "in_house_expenses": 1400000,
+        "outside_firm_income": 575000,
+        "outside_firms": 11,
+        "filings": 12
+      },
+      "2022-Q1": {
+        "in_house_expenses": 1450000,
+        "outside_firm_income": 595000,
+        "outside_firms": 11,
+        "filings": 12
+      },
+      "2022-Q2": {
+        "in_house_expenses": 1450000,
+        "outside_firm_income": 595000,
+        "outside_firms": 11,
+        "filings": 12
+      },
+      "2022-Q3": {
+        "in_house_expenses": 1200000,
+        "outside_firm_income": 675000,
+        "outside_firms": 12,
+        "filings": 13
+      },
+      "2022-Q4": {
+        "in_house_expenses": 1890000,
+        "outside_firm_income": 675000,
+        "outside_firms": 12,
+        "filings": 13
+      },
+      "2023-Q1": {
+        "in_house_expenses": 1940000,
+        "outside_firm_income": 640000,
+        "outside_firms": 11,
+        "filings": 13
+      },
+      "2023-Q2": {
+        "in_house_expenses": 1650000,
+        "outside_firm_income": 640000,
+        "outside_firms": 11,
+        "filings": 13
+      },
+      "2023-Q3": {
+        "in_house_expenses": 1530000,
+        "outside_firm_income": 560000,
+        "outside_firms": 10,
+        "filings": 12
+      },
+      "2023-Q4": {
+        "in_house_expenses": 2230000,
+        "outside_firm_income": 575000,
+        "outside_firms": 10,
+        "filings": 12
+      },
+      "2024-Q1": {
+        "in_house_expenses": 2230000,
+        "outside_firm_income": 590000,
+        "outside_firms": 10,
+        "filings": 11
+      },
+      "2024-Q2": {
+        "in_house_expenses": 2150000,
+        "outside_firm_income": 580000,
+        "outside_firms": 10,
+        "filings": 11
+      },
+      "2024-Q3": {
+        "in_house_expenses": 2080000,
+        "outside_firm_income": 590000,
+        "outside_firms": 10,
+        "filings": 11
+      },
+      "2024-Q4": {
+        "in_house_expenses": 2010000,
+        "outside_firm_income": 580000,
+        "outside_firms": 11,
+        "filings": 12
+      },
+      "2025-Q1": {
+        "in_house_expenses": 2950000,
+        "outside_firm_income": 730000,
+        "outside_firms": 11,
+        "filings": 14
+      },
+      "2025-Q2": {
+        "in_house_expenses": 2520000,
+        "outside_firm_income": 745000,
+        "outside_firms": 12,
+        "filings": 14
+      },
+      "2025-Q3": {
+        "in_house_expenses": 1970000,
+        "outside_firm_income": 825000,
+        "outside_firms": 13,
+        "filings": 15
+      },
+      "2025-Q4": {
+        "in_house_expenses": 1760000,
+        "outside_firm_income": 890000,
+        "outside_firms": 14,
+        "filings": 16
+      },
+      "2026-Q1": {
+        "in_house_expenses": 2040000,
+        "outside_firm_income": 850000,
+        "outside_firms": 14,
+        "filings": 16
+      },
+      "2026-Q2": {
+        "in_house_expenses": 1820000,
+        "outside_firm_income": 850000,
+        "outside_firms": 13,
+        "filings": 16
+      },
+      "2026-Q3": {
+        "in_house_expenses": 1710000,
+        "outside_firm_income": 820000,
+        "outside_firms": 14,
+        "filings": 16
+      }
+    },
+    "outside_registrants": {
+      "THE WASHINGTON TAX & PUBLIC POLICY GROUP": 35,
+      "AKIN GUMP STRAUSS HAUER & FELD": 35,
+      "CAPITOL COUNSEL LLC": 35,
+      "VENTURE GOVERNMENT STRATEGIES, LLC (FKA HOBART HALLAWAY & QUAYLE VENTURES, LLC)": 35,
+      "THE RUSSELL GROUP, INC.": 35,
+      "TODD STRATEGY GROUP": 31,
+      "BGR GOVERNMENT AFFAIRS": 30,
+      "INVARIANT LLC": 30,
+      "ACG ADVOCACY": 22,
+      "EAST END GROUP, LLC": 20,
+      "HB STRATEGIES": 19,
+      "FORBES-TATE": 16,
+      "THE PETERSON GROUP INC": 13,
+      "BALLARD PARTNERS": 8,
+      "LINCOLN POLICY GROUP": 7,
+      "RAFFANIELLO & ASSOCIATES": 6,
+      "STANTON PARK GROUP": 5,
+      "GREENBERG TRAURIG, LLP": 5,
+      "MERCURY PUBLIC AFFAIRS, LLC": 5,
+      "CASSIDY & ASSOCIATES, INC.": 4,
+      "GEPHARDT GROUP GOVERNMENT AFFAIRS": 4,
+      "POLARIS GOVERNMENT RELATIONS, LLC": 4,
+      "SBL STRATEGIES, LLC": 4,
+      "WILMER CUTLER PICKERING HALE AND DORR LLP": 4,
+      "CAPITOL TAX PARTNERS, LLP": 4,
+      "WILLIAMS AND JENSEN, PLLC": 4,
+      "HOLLAND & HART LLP": 4,
+      "LYNN TJEERDSMA CONSULTING": 3,
+      "PRIME POLICY GROUP": 2,
+      "SOBBA PUBLIC, LLC": 2,
+      "RURAL AND AG POLICY CONSULTANTS": 2
+    },
+    "lobbyists": {
+      "total": 186,
+      "with_covered_position": 131,
+      "sample_with_covered_position": [
+        {
+          "lda_lobbyist_id": 67397,
+          "name": "GREGG HARTLEY",
+          "covered_positions": [
+            "Chief of Staff Congressman Roy Blunt",
+            "Chief of Staff Rep. Roy Blunt",
+            "Chief of Staff Rep. Blunt",
+            "Congressman Blunt - Chief of Staff"
+          ],
+          "registrants": [
+            "HB STRATEGIES"
+          ],
+          "first_quarter": "2018-Q1",
+          "last_quarter": "2025-Q4",
+          "filing_count": 20,
+          "example_source_url": "https://lda.gov/filings/public/filing/7b56a372-7b62-4ce5-aabb-cd91ea007a6c/print/"
+        },
+        {
+          "lda_lobbyist_id": 67394,
+          "name": "WILLIAM FOX",
+          "covered_positions": [
+            "Legislative Assistant House Transportation Committee",
+            "Legislative Assistant House Transportation Comittee"
+          ],
+          "registrants": [
+            "HB STRATEGIES"
+          ],
+          "first_quarter": "2018-Q1",
+          "last_quarter": "2018-Q4",
+          "filing_count": 7,
+          "example_source_url": "https://lda.gov/filings/public/filing/7b56a372-7b62-4ce5-aabb-cd91ea007a6c/print/"
+        },
+        {
+          "lda_lobbyist_id": 36434,
+          "name": "JORDAN BERNSTEIN",
+          "covered_positions": [
+            "Chief of Staff and Legis. Dir. for Cong Emerson"
+          ],
+          "registrants": [
+            "CASSIDY & ASSOCIATES, INC."
+          ],
+          "first_quarter": "2018-Q1",
+          "last_quarter": "2018-Q4",
+          "filing_count": 6,
+          "example_source_url": "https://lda.gov/filings/public/filing/b79ac9ce-3b26-407c-af6f-aad3dfeb663b/print/"
+        },
+        {
+          "lda_lobbyist_id": 60906,
+          "name": "ANDREW HAWKINS",
+          "covered_positions": [
+            "Rep. Mike Rogers, LA, LD, Chief of Staff"
+          ],
+          "registrants": [
+            "EAST END GROUP, LLC"
+          ],
+          "first_quarter": "2018-Q1",
+          "last_quarter": "2022-Q4",
+          "filing_count": 22,
+          "example_source_url": "https://lda.gov/filings/public/filing/2443bce0-1ced-460c-b503-a8a1dcddc72c/print/"
+        },
+        {
+          "lda_lobbyist_id": 53306,
+          "name": "MICHAEL WOODY",
+          "covered_positions": [
+            "Rep. Berry, LA; Sen. Harkin, LA; HELP Committee"
+          ],
+          "registrants": [
+            "EAST END GROUP, LLC"
+          ],
+          "first_quarter": "2018-Q1",
+          "last_quarter": "2022-Q3",
+          "filing_count": 21,
+          "example_source_url": "https://lda.gov/filings/public/filing/2443bce0-1ced-460c-b503-a8a1dcddc72c/print/"
+        },
+        {
+          "lda_lobbyist_id": 150526,
+          "name": "KELLY CHILDRESS LANGE",
+          "covered_positions": [
+            "Rep. Shimkus, LA; Rep. Rogers, Health Policy Adviser"
+          ],
+          "registrants": [
+            "EAST END GROUP, LLC"
+          ],
+          "first_quarter": "2018-Q1",
+          "last_quarter": "2022-Q4",
+          "filing_count": 22,
+          "example_source_url": "https://lda.gov/filings/public/filing/2443bce0-1ced-460c-b503-a8a1dcddc72c/print/"
+        },
+        {
+          "lda_lobbyist_id": 59712,
+          "name": "BRIAN DIFFELL",
+          "covered_positions": [
+            "Policy Advisor, Senate Republican Conference. Legislative Director; Senator Blunt. Legislative Director; Rep. Blunt. Sr. Policy Advisor, House Majority Whip. Sr. Policy Advisor, House Republican Whip. Research Analyst, house majority whip.",
+            "Special Assistant to the Chief Deputy Whip",
+            "Policy Adv., Sen. Rep. Conference: Leg. Director Sen. Blunt; Leg. Dir. Rep. Blunt; Sr. Policy Adv. Rep. Maj. Whip; Sr. Policy Adv. House Maj. Whip; Research Analyst, House Maj. Whip; Spec. Asst to the Chief Deputy Whip Blunt"
+          ],
+          "registrants": [
+            "THE WASHINGTON TAX & PUBLIC POLICY GROUP"
+          ],
+          "first_quarter": "2018-Q1",
+          "last_quarter": "2023-Q3",
+          "filing_count": 24,
+          "example_source_url": "https://lda.gov/filings/public/filing/c8a9de43-0698-4aac-a823-5ae1c3718439/print/"
+        },
+        {
+          "lda_lobbyist_id": 38177,
+          "name": "GREGORY NICKERSON",
+          "covered_positions": [
+            "Staff Dir., Ways&Means Subcom. on Select Reven.",
+            "Tax Counsel, Ways and Means Committee; Staff Director, Ways and Means Select Revenue Measures Subcommittee"
+          ],
+          "registrants": [
+            "THE WASHINGTON TAX & PUBLIC POLICY GROUP"
+          ],
+          "first_quarter": "2018-Q1",
+          "last_quarter": "2026-Q3",
+          "filing_count": 36,
+          "example_source_url": "https://lda.gov/filings/public/filing/c8a9de43-0698-4aac-a823-5ae1c3718439/print/"
+        },
+        {
+          "lda_lobbyist_id": 50947,
+          "name": "JAN FOWLER",
+          "covered_positions": [
+            "Intern; Representative McCrery",
+            "Leg. Asst, Sen. Voinovich; Leg. Assistant, Leg. Correspondent, Staff Assistant, Intern from Rep. McCrery"
+          ],
+          "registrants": [
+            "THE WASHINGTON TAX & PUBLIC POLICY GROUP"
+          ],
+          "first_quarter": "2018-Q1",
+          "last_quarter": "2019-Q3",
+          "filing_count": 7,
+          "example_source_url": "https://lda.gov/filings/public/filing/c8a9de43-0698-4aac-a823-5ae1c3718439/print/"
+        },
+        {
+          "lda_lobbyist_id": 43042,
+          "name": "PATRICK RAFFANIELLO",
+          "covered_positions": [
+            "Chief of Staff, Congressman Bill Brewster"
+          ],
+          "registrants": [
+            "RAFFANIELLO & ASSOCIATES"
+          ],
+          "first_quarter": "2018-Q1",
+          "last_quarter": "2019-Q2",
+          "filing_count": 6,
+          "example_source_url": "https://lda.gov/filings/public/filing/f787fb10-7a44-4393-8147-1d6a7fba83be/print/"
+        },
+        {
+          "lda_lobbyist_id": 64950,
+          "name": "JUSTIN MCCARTHY",
+          "covered_positions": [
+            "Spec. Asst to Pres for leg affairs, exec ofc of pres, jan08-dec08; asst. USTR for congress. affairs, exec. Offc of pres, jan06-dec07; asst. USTR for intergov. & pub affairs, exec offc of pres, sep05-may06; leg asst, rep Thomas w. ewing, jan96-jul98."
+          ],
+          "registrants": [
+            "AKIN GUMP STRAUSS HAUER & FELD"
+          ],
+          "first_quarter": "2018-Q1",
+          "last_quarter": "2020-Q2",
+          "filing_count": 10,
+          "example_source_url": "https://lda.gov/filings/public/filing/2cc34340-d98a-41bb-9ca6-f3d71143dc00/print/"
+        },
+        {
+          "lda_lobbyist_id": 62934,
+          "name": "CLINTON ROBINSON",
+          "covered_positions": [
+            "Associate Administrator, General Service Administration; and Legislative Director, Rep. John Linder."
+          ],
+          "registrants": [
+            "CAPITOL COUNSEL LLC"
+          ],
+          "first_quarter": "2018-Q1",
+          "last_quarter": "2026-Q3",
+          "filing_count": 36,
+          "example_source_url": "https://lda.gov/filings/public/filing/32f45cae-ce6c-41b9-9f80-d8845580abef/print/"
+        },
+        {
+          "lda_lobbyist_id": 58709,
+          "name": "JEFFERY WALTER",
+          "covered_positions": [
+            "Special Projects Director for Senator Alfonso D'Amato; Special Projects Director for Senator Connie Mack; Deputy Staff Director of the Joint Economic Committee."
+          ],
+          "registrants": [
+            "CAPITOL COUNSEL LLC"
+          ],
+          "first_quarter": "2018-Q1",
+          "last_quarter": "2021-Q3",
+          "filing_count": 16,
+          "example_source_url": "https://lda.gov/filings/public/filing/32f45cae-ce6c-41b9-9f80-d8845580abef/print/"
+        },
+        {
+          "lda_lobbyist_id": 60690,
+          "name": "AARON COHEN",
+          "covered_positions": [
+            "Chief of Staff & Legislative Assistant, Sen. John Ensign; Legislative Aide, Sen. Richard Bryan; Legislative Corresp., Sen. Richard Bryan."
+          ],
+          "registrants": [
+            "CAPITOL COUNSEL LLC"
+          ],
+          "first_quarter": "2018-Q1",
+          "last_quarter": "2018-Q3",
+          "filing_count": 3,
+          "example_source_url": "https://lda.gov/filings/public/filing/32f45cae-ce6c-41b9-9f80-d8845580abef/print/"
+        },
+        {
+          "lda_lobbyist_id": 63034,
+          "name": "DAVID OLANDER",
+          "covered_positions": [
+            "Legislative Assistant, Rep. Wally Herger; Tax & Policy Counsel, Rep. Thomas Reynolds; Tax Counsel & Chief Tax Counsel, House Committee on Ways and Means."
+          ],
+          "registrants": [
+            "CAPITOL COUNSEL LLC"
+          ],
+          "first_quarter": "2018-Q1",
+          "last_quarter": "2026-Q3",
+          "filing_count": 30,
+          "example_source_url": "https://lda.gov/filings/public/filing/32f45cae-ce6c-41b9-9f80-d8845580abef/print/"
+        }
+      ]
+    },
+    "issue_codes": {
+      "Agriculture": 272,
+      "Health Issues": 213,
+      "Taxation/Internal Revenue Code": 153,
+      "Environment/Superfund": 145,
+      "Trade (domestic/foreign)": 118,
+      "Budget/Appropriations": 103,
+      "Copyright/Patent/Trademark": 73,
+      "Natural Resources": 51,
+      "Medicare/Medicaid": 50,
+      "Tariff (miscellaneous tariff bills)": 49,
+      "Energy/Nuclear": 44,
+      "Pharmacy": 38,
+      "Labor Issues/Antitrust/Workplace": 35,
+      "Chemicals/Chemical Industry": 34,
+      "Foreign Relations": 26,
+      "Telecommunications": 18,
+      "Government Issues": 15,
+      "Immigration": 14,
+      "Civil Rights/Civil Liberties": 14,
+      "Transportation": 11,
+      "Food Industry (safety, labeling, etc.)": 8,
+      "Financial Institutions/Investments/Securities": 8,
+      "Manufacturing": 6,
+      "Education": 5,
+      "Economics/Economic Development": 5,
+      "Defense": 5,
+      "Science/Technology": 1,
+      "Banking": 1
+    },
+    "government_entities_lobbied": {
+      "HOUSE OF REPRESENTATIVES": 1377,
+      "SENATE": 1368,
+      "Agriculture, Dept of (USDA)": 467,
+      "Environmental Protection Agency (EPA)": 442,
+      "U.S. Trade Representative (USTR)": 341,
+      "Treasury, Dept of": 318,
+      "Food & Drug Administration (FDA)": 275,
+      "Natl Economic Council (NEC)": 267,
+      "Natl Security Council (NSC)": 267,
+      "Executive Office of the President (EOP)": 256,
+      "Commerce, Dept of (DOC)": 242,
+      "State, Dept of (DOS)": 241,
+      "White House Office": 235,
+      "Interior, Dept of (DOI)": 233,
+      "Patent & Trademark Office (PTO)": 221,
+      "Council on Environmental Quality (CEQ)": 171,
+      "U.S. Agency for International Development (USAID)": 171,
+      "Bureau of Land Management (BLM)": 151,
+      "Homeland Security, Dept of (DHS)": 125,
+      "Health & Human Services, Dept of (HHS)": 82,
+      "Small Business Administration (SBA)": 46,
+      "Office of Management & Budget (OMB)": 15,
+      "Internal Revenue Service (IRS)": 14,
+      "Nuclear Regulatory Commission (NRC)": 12,
+      "Centers For Medicare and Medicaid Services (CMS)": 11,
+      "Defense, Dept of (DOD)": 9,
+      "U.S. Geological Survey (USGS)": 8,
+      "Vice President of the U.S.": 7,
+      "Securities & Exchange Commission (SEC)": 3,
+      "U.S. Fish & Wildlife Service (USFWS)": 2
+    },
+    "glyphosate_keyword_activities": {
+      "terms": [
+        "glyphosate",
+        "roundup",
+        "fifra",
+        "insecticide, fungicide",
+        "pesticide",
+        "herbicide",
+        "preempt",
+        "pre-empt",
+        "label",
+        "uniformity",
+        "failure to warn",
+        "crop protection",
+        "litigation"
+      ],
+      "total_activity_matches": 466,
+      "per_quarter": {
+        "2018-Q1": 14,
+        "2018-Q2": 13,
+        "2018-Q3": 11,
+        "2018-Q4": 11,
+        "2019-Q1": 15,
+        "2019-Q2": 7,
+        "2019-Q3": 7,
+        "2019-Q4": 7,
+        "2020-Q1": 9,
+        "2020-Q2": 7,
+        "2020-Q3": 7,
+        "2020-Q4": 9,
+        "2021-Q1": 9,
+        "2021-Q2": 9,
+        "2021-Q3": 9,
+        "2021-Q4": 9,
+        "2022-Q1": 8,
+        "2022-Q2": 9,
+        "2022-Q3": 11,
+        "2022-Q4": 10,
+        "2023-Q1": 13,
+        "2023-Q2": 10,
+        "2023-Q3": 13,
+        "2023-Q4": 13,
+        "2024-Q1": 13,
+        "2024-Q2": 17,
+        "2024-Q3": 12,
+        "2024-Q4": 16,
+        "2025-Q1": 19,
+        "2025-Q2": 17,
+        "2025-Q3": 30,
+        "2025-Q4": 32,
+        "2026-Q1": 30,
+        "2026-Q2": 20,
+        "2026-Q3": 20
+      },
+      "strong_terms": [
+        "glyphosate",
+        "roundup",
+        "fifra",
+        "insecticide, fungicide",
+        "preempt",
+        "pre-empt",
+        "uniformity",
+        "failure to warn"
+      ],
+      "strong_per_quarter": {
+        "2018-Q1": 4,
+        "2018-Q2": 4,
+        "2018-Q3": 4,
+        "2018-Q4": 4,
+        "2019-Q1": 5,
+        "2019-Q2": 1,
+        "2019-Q3": 1,
+        "2019-Q4": 1,
+        "2020-Q1": 4,
+        "2020-Q2": 2,
+        "2020-Q3": 2,
+        "2020-Q4": 2,
+        "2021-Q1": 2,
+        "2021-Q2": 2,
+        "2021-Q3": 2,
+        "2021-Q4": 2,
+        "2022-Q1": 2,
+        "2022-Q2": 4,
+        "2022-Q3": 6,
+        "2022-Q4": 6,
+        "2023-Q1": 5,
+        "2023-Q2": 4,
+        "2023-Q3": 5,
+        "2023-Q4": 7,
+        "2024-Q1": 7,
+        "2024-Q2": 10,
+        "2024-Q3": 6,
+        "2024-Q4": 6,
+        "2025-Q1": 6,
+        "2025-Q2": 8,
+        "2025-Q3": 11,
+        "2025-Q4": 14,
+        "2026-Q1": 15,
+        "2026-Q2": 8,
+        "2026-Q3": 7
+      },
+      "sample_decision_period": [
+        {
+          "quarter": "2026-Q3",
+          "registrant": "HOLLAND & HART LLP",
+          "issue": "ENV",
+          "matched": [
+            "fifra",
+            "insecticide, fungicide",
+            "pesticide"
+          ],
+          "excerpt": "Environmental compliance issues; monitor and engage on legislative and administrative action related to Federal Insecticide, Fungicide, Rodenticide (FIFRA) regulations; monitor pesticide legislation.",
+          "source_url": "https://lda.gov/filings/public/filing/8894e91e-f4ab-4c5b-b841-d4f6fdc27892/print/"
+        },
+        {
+          "quarter": "2026-Q2",
+          "registrant": "THE PETERSON GROUP INC",
+          "issue": "AGR",
+          "matched": [
+            "fifra",
+            "insecticide, fungicide",
+            "pesticide"
+          ],
+          "excerpt": "Monitor and engage in legislative and administrative action related to Federal Insecticide, Fungicide, and Rodenticide (FIFRA) Regulations. Monitor and engage in legislative and administrative action related to the Farm Bill. Educate Members of Congress AND staff on pesticide registration and regulation.",
+          "source_url": "https://lda.gov/filings/public/filing/72f5b134-c058-4180-9d67-393b30eef04a/print/"
+        },
+        {
+          "quarter": "2026-Q2",
+          "registrant": "BAYER CORPORATION (CONSOLIDATED REPORT)",
+          "issue": "AGR",
+          "matched": [
+            "fifra",
+            "insecticide, fungicide",
+            "pesticide",
+            "label",
+            "uniformity"
+          ],
+          "excerpt": "Monitor and engage on legislative and administrative action related to Federal Insecticide, Fungicide, Rodenticide (FIFRA) Regulations. Monitor and engage on legislative and administrative action related to the Endangered Species Act and related reforms. Monitor and engage on legislative and administrative action related to 7 CFR Part 340. Monitor and engage on legislative and administrative action related to biotech innovation and regulation. Monitor and engage on legislative and administrative action related to international adoption of DNA marker evidence for plant variety protection patent",
+          "source_url": "https://lda.gov/filings/public/filing/85d0f018-b51b-48f7-acbd-f24be2818753/print/"
+        },
+        {
+          "quarter": "2026-Q2",
+          "registrant": "BAYER CORPORATION (CONSOLIDATED REPORT)",
+          "issue": "BUD",
+          "matched": [
+            "pesticide",
+            "label",
+            "uniformity"
+          ],
+          "excerpt": "Monitor and engage on legislative and administrative action on appropriations and budget. Monitor and engage on legislative and administrative action related to the uniformity of pesticide labeling. Monitor and engage on legislative and administrative action related to FY2027 Interior, Environment, and Related Agencies Appropriations Acts. Monitor and engage on legislative and administrative action related to FY2027 Agriculture, Rural Development, Food and Drug Administration, and Related Agencies Appropriations Acts. H.R. 9171, Department of the Interior, Environment, and Related Agencies App",
+          "source_url": "https://lda.gov/filings/public/filing/85d0f018-b51b-48f7-acbd-f24be2818753/print/"
+        },
+        {
+          "quarter": "2026-Q2",
+          "registrant": "BAYER CORPORATION (CONSOLIDATED REPORT)",
+          "issue": "HCR",
+          "matched": [
+            "label",
+            "uniformity"
+          ],
+          "excerpt": "Monitor and engage on legislative and administrative action related to health care policy. Monitor and engage on legislative and administrative action related to womens health issues. Monitor and engage on legislative and administrative action related to regulation of over-the-counter medicines. Monitor and engage on legislative and administrative action related to dietary supplements, including FDA regulation of ingredients. Monitor and engage on legislative and administrative action related to servicing of medical device equipment. Monitor and engage on legislative and administrative action ",
+          "source_url": "https://lda.gov/filings/public/filing/85d0f018-b51b-48f7-acbd-f24be2818753/print/"
+        },
+        {
+          "quarter": "2026-Q1",
+          "registrant": "HOLLAND & HART LLP",
+          "issue": "ENV",
+          "matched": [
+            "fifra",
+            "insecticide, fungicide"
+          ],
+          "excerpt": "Environmental compliance issues; Monitor and engage on legislative and administrative action related to Federal Insecticide, Fungicide, Rodenticide (FIFRA) Regulations.",
+          "source_url": "https://lda.gov/filings/public/filing/8b71cd50-add4-46e0-b3e0-858e130acdba/print/"
+        },
+        {
+          "quarter": "2026-Q1",
+          "registrant": "THE RUSSELL GROUP, INC.",
+          "issue": "AGR",
+          "matched": [
+            "label",
+            "uniformity",
+            "crop protection"
+          ],
+          "excerpt": "Issues related to trade; issues related to crop protection; issues related to the Farm Bill; issues related to agricultural labeling uniformity; issues related to biotech approval; and issues related to appropriations.",
+          "source_url": "https://lda.gov/filings/public/filing/4850a5eb-34ec-493d-97d9-f2f99c6a9066/print/"
+        },
+        {
+          "quarter": "2026-Q1",
+          "registrant": "BAYER CORPORATION (CONSOLIDATED REPORT)",
+          "issue": "BUD",
+          "matched": [
+            "pesticide",
+            "label",
+            "uniformity"
+          ],
+          "excerpt": "Monitor and engage on legislative and administrative action on appropriations and budget. Monitor and engage on legislative and administrative action related to the uniformity of pesticide labeling. Monitor and engage on legislative and administrative action related to FY2027 Interior, Environment, and Related Agencies Appropriations Acts. Monitor and engage on legislative and administrative action related to FY2027 Agriculture, Rural Development, Food and Drug Administration, and Related Agencies Appropriations Acts. H.Con.Res. 14, Establishing the congressional budget for the United States G",
+          "source_url": "https://lda.gov/filings/public/filing/a229bfd0-5906-4e09-949f-3e2dab8d1b73/print/"
+        },
+        {
+          "quarter": "2026-Q1",
+          "registrant": "BAYER CORPORATION (CONSOLIDATED REPORT)",
+          "issue": "HCR",
+          "matched": [
+            "label",
+            "uniformity"
+          ],
+          "excerpt": "Monitor and engage on legislative and administrative action related to health care policy. Monitor and engage on legislative and administrative action related to womens health issues. Monitor and engage on legislative and administrative action related to over-the-counter consumer care products. Monitor and engage on legislative and administrative action related to dietary supplements, including purchasing through HSA funds. Monitor and engage on legislative and administrative action related to servicing of medical device equipment. Monitor and engage on legislative and administrative action re",
+          "source_url": "https://lda.gov/filings/public/filing/a229bfd0-5906-4e09-949f-3e2dab8d1b73/print/"
+        },
+        {
+          "quarter": "2026-Q1",
+          "registrant": "BAYER CORPORATION (CONSOLIDATED REPORT)",
+          "issue": "NAT",
+          "matched": [
+            "glyphosate"
+          ],
+          "excerpt": "Monitor and engage on legislative and administrative action related to phosphate mining operations and permits. Monitor and engage on legislative and administrative action related to Caldwell Canyon permitting. Monitor and engage on legislative and administrative action related to proposed Conservation and Landscape Health Rule and Greater Sage Grouse Habitat Conservation Plans. Monitor and engage on legislative and administrative action related to the Endangered Species Act. Monitor and engage regarding the inclusion of glyphosate on the critical minerals list. Monitor and engage on legislati",
+          "source_url": "https://lda.gov/filings/public/filing/a229bfd0-5906-4e09-949f-3e2dab8d1b73/print/"
+        },
+        {
+          "quarter": "2026-Q1",
+          "registrant": "LYNN TJEERDSMA CONSULTING",
+          "issue": "AGR",
+          "matched": [
+            "glyphosate"
+          ],
+          "excerpt": "Glyphosate liability protection in legislation.",
+          "source_url": "https://lda.gov/filings/public/filing/d1da351c-0de2-44e1-bf22-59af92881350/print/"
+        },
+        {
+          "quarter": "2025-Q4",
+          "registrant": "LYNN TJEERDSMA CONSULTING",
+          "issue": "AGR",
+          "matched": [
+            "glyphosate"
+          ],
+          "excerpt": "Legal protection for the production and manufactcure of glyphosate",
+          "source_url": "https://lda.gov/filings/public/filing/5fa574af-9638-4cba-8ec9-e0f5efee54f2/print/"
+        },
+        {
+          "quarter": "2025-Q4",
+          "registrant": "LYNN TJEERDSMA CONSULTING",
+          "issue": "AGR",
+          "matched": [
+            "glyphosate"
+          ],
+          "excerpt": "Glyphosate liability protection in legislation",
+          "source_url": "https://lda.gov/filings/public/filing/a7d1bf4f-8d71-4216-802a-fc51c6c53dee/print/"
+        },
+        {
+          "quarter": "2025-Q3",
+          "registrant": "BAYER CORPORATION (CONSOLIDATED REPORT)",
+          "issue": "NAT",
+          "matched": [
+            "glyphosate"
+          ],
+          "excerpt": "Monitor and engage on legislative and administrative action related to phosphate mining operations and permits. Monitor and engage on legislative and administrative action related to Caldwell Canyon permitting. Monitor and engage on legislative and administrative action related to proposed Conservation and Landscape Health Rule and Greater Sage Grouse Habitat Conservation Plans. Monitor and engage on legislative and administrative action related to the Endangered Species Act. Monitor and engage regarding the inclusion of glyphosate on the critical minerals list. H.R. 1897, ESA Amendments Act o",
+          "source_url": "https://lda.gov/filings/public/filing/c0647eff-56a5-4e0e-849a-c05bd688fb8e/print/"
+        },
+        {
+          "quarter": "2025-Q2",
+          "registrant": "HOLLAND & HART LLP",
+          "issue": "NAT",
+          "matched": [
+            "fifra",
+            "insecticide, fungicide"
+          ],
+          "excerpt": "Federal policies and actions affecting the companys mining interests, including permitting, land use, and environmental compliance; Monitor and engage on legislative and administrative action related to Federal Insecticide, Fungicide, Rodenticide (FIFRA) Regulations.",
+          "source_url": "https://lda.gov/filings/public/filing/ba2e99d2-1f4f-438e-b825-f49383dc4b85/print/"
+        },
+        {
+          "quarter": "2025-Q2",
+          "registrant": "BAYER CORPORATION (CONSOLIDATED REPORT)",
+          "issue": "BUD",
+          "matched": [
+            "pesticide",
+            "label",
+            "uniformity"
+          ],
+          "excerpt": "Monitor and engage on legislative and administrative action on appropriations and budget. Monitor and engage on legislative and administrative action related to FY2025 Interior, Environment, and Related Agencies Appropriations Acts. Monitor and engage on legislative and administrative action related to FY2026 Interior, Environment, and Related Agencies Appropriations Acts. Monitor and engage on legislative and administrative action related to the uniformity of pesticide labeling. Monitor and engage on legislative action related to the 2025 Agriculture, Rural Development, Food and Drug Administ",
+          "source_url": "https://lda.gov/filings/public/filing/173aa36a-0972-46cf-9502-cd55fc8cf647/print/"
+        },
+        {
+          "quarter": "2025-Q1",
+          "registrant": "AKIN GUMP STRAUSS HAUER & FELD",
+          "issue": "AGR",
+          "matched": [
+            "fifra",
+            "insecticide, fungicide"
+          ],
+          "excerpt": "Issues related to the Federal Insecticide, Fungicide and Rodenticide Act (FIFRA) (P.L. 80-104).",
+          "source_url": "https://lda.gov/filings/public/filing/61625664-5185-469a-960b-681287761b42/print/"
+        },
+        {
+          "quarter": "2025-Q1",
+          "registrant": "THE PETERSON GROUP INC",
+          "issue": "AGR",
+          "matched": [
+            "fifra",
+            "insecticide, fungicide",
+            "pesticide"
+          ],
+          "excerpt": "Monitor and engage in legislative and administrative action related to Federal Insecticide, Fungicide, and Rodenticide (FIFRA) Regulations. Monitor and engage in legislative and administrative action related to the Farm Bill. Educate Members of Congress, staff, and the Administration on pesticide registration and regulation.",
+          "source_url": "https://lda.gov/filings/public/filing/8655072b-7e65-4adc-9ad3-d98b1f76f3b2/print/"
+        },
+        {
+          "quarter": "2025-Q1",
+          "registrant": "BAYER CORPORATION (CONSOLIDATED REPORT)",
+          "issue": "AGR",
+          "matched": [
+            "fifra",
+            "insecticide, fungicide",
+            "pesticide",
+            "label",
+            "uniformity"
+          ],
+          "excerpt": "Monitor and engage on legislative and administrative action related to pollinator health and habitat promotion. Monitor and engage on legislative and administrative action related to Federal Insecticide, Fungicide, Rodenticide (FIFRA) Regulations. Monitor and engage on legislative and administrative action related to the Endangered Species Act and related reforms. Monitor and engage on legislative and administrative action related to 7 CFR Part 340. Monitor and engage on the implementation of the National Bioengineered Food Disclosure Law (P.L. 114-216). Monitor and engage on legislative and a",
+          "source_url": "https://lda.gov/filings/public/filing/3d783c63-898d-48ba-9e1a-ea26025b6934/print/"
+        },
+        {
+          "quarter": "2025-Q1",
+          "registrant": "BAYER CORPORATION (CONSOLIDATED REPORT)",
+          "issue": "BUD",
+          "matched": [
+            "pesticide",
+            "label",
+            "uniformity"
+          ],
+          "excerpt": "Monitor and engage on legislative and administrative action on appropriations and budget. Monitor and engage on legislative and administrative action related to implementation of the American Relief Act, 2025 (Public Law 118-158). Monitor and engage on legislative and administrative action related to FY2025 Interior, Environment, and Related Agencies Appropriations Acts. Monitor and engage on legislative and administrative action related to the uniformity of pesticide labeling. Monitor and engage on legislative action related to the 2025 Agriculture, Rural Development, Food and Drug Administra",
+          "source_url": "https://lda.gov/filings/public/filing/3d783c63-898d-48ba-9e1a-ea26025b6934/print/"
+        },
+        {
+          "quarter": "2025-Q1",
+          "registrant": "BAYER CORPORATION (CONSOLIDATED REPORT)",
+          "issue": "ENV",
+          "matched": [
+            "fifra"
+          ],
+          "excerpt": "Monitor and engage on legislative and administrative action related to climate change, including sustainable agriculture. Monitor and engage on legislative and administrative action related to FIFRA Regulations, including voluntary carbon markets. Monitor and engage on legislative and administrative action related to the Endangered Species Act. H.R. 1897, ESA Amendments Act of 2025.",
+          "source_url": "https://lda.gov/filings/public/filing/3d783c63-898d-48ba-9e1a-ea26025b6934/print/"
+        },
+        {
+          "quarter": "2025-Q1",
+          "registrant": "THE RUSSELL GROUP, INC.",
+          "issue": "AGR",
+          "matched": [
+            "label",
+            "uniformity",
+            "crop protection"
+          ],
+          "excerpt": "Issues related to trade; issues related to crop protection; issues related to the Farm Bill; issues related to agricultural labeling uniformity; and issues related to appropriations.",
+          "source_url": "https://lda.gov/filings/public/filing/5f3377c0-6279-4723-bca5-72a28153c389/print/"
+        }
+      ],
+      "sample_earliest": [
+        {
+          "quarter": "2018-Q1",
+          "registrant": "GREENBERG TRAURIG, LLP",
+          "issue": "AGR",
+          "matched": [
+            "glyphosate",
+            "pesticide"
+          ],
+          "excerpt": "Monitor implementation of the Agricultural Act of 2014 (P.L. 113-79). \nMonitor legislative and administrative action related to pollinators. \nMonitor legislative and administrative action related to glyphosate regulation.\nMonitor EPA action related to the benefits of neonicotinoid seed treatment to soybean production. (Docket No. EPAHQOPP20140737)\nOutreach and monitoring related to Farm bill reauthorization.\nMonitor legislative and administrative action related to PRIA reauthorization.\nH.R. 1029, Pesticide Registration Improvement Extension Act of 2017.",
+          "source_url": "https://lda.gov/filings/public/filing/044b4dc7-c04a-4fe6-ad61-8495c14a373c/print/"
+        },
+        {
+          "quarter": "2018-Q1",
+          "registrant": "GREENBERG TRAURIG, LLP",
+          "issue": "ENV",
+          "matched": [
+            "fifra",
+            "insecticide, fungicide"
+          ],
+          "excerpt": "Monitoring and Congressional outreach related to the Federal Insecticide, Fungicide, and Rodenticide Act (FIFRA).\nMonitor legislative and administrative action related to the Endangered Species Act.\nH.R. 1430, Honest and Open New EPA Science Treatment Act of 2017.\nH.R. 3040, Saving Americas Pollinators Act.\nH.R. 5015, Saving Americas Pollinators Act.\nS. 951, Regulatory Accountability Act.",
+          "source_url": "https://lda.gov/filings/public/filing/044b4dc7-c04a-4fe6-ad61-8495c14a373c/print/"
+        },
+        {
+          "quarter": "2018-Q2",
+          "registrant": "GREENBERG TRAURIG, LLP",
+          "issue": "AGR",
+          "matched": [
+            "glyphosate",
+            "pesticide"
+          ],
+          "excerpt": "Monitor implementation of the Agricultural Act of 2014 (P.L. 113-79). \nMonitor legislative and administrative action related to pollinators. \nMonitor legislative and administrative action related to glyphosate regulation.\nMonitor EPA action related to the benefits of neonicotinoid seed treatment to soybean production. (Docket No. EPAHQOPP20140737)\nOutreach and monitoring related to Farm bill reauthorization.\nH.R. 2, Agriculture and Nutrition Act of 2018.\nS. 3042, Agriculture Improvement Act of 2018.\nMonitor legislative and administrative action related to PRIA reauthorization.\nH.R. 1029, Pesti",
+          "source_url": "https://lda.gov/filings/public/filing/a29d60bf-73a2-4ea3-ac91-90246b918b97/print/"
+        },
+        {
+          "quarter": "2018-Q3",
+          "registrant": "GREENBERG TRAURIG, LLP",
+          "issue": "AGR",
+          "matched": [
+            "glyphosate",
+            "pesticide"
+          ],
+          "excerpt": "Monitor implementation of the Agricultural Act of 2014 (P.L. 113-79). \nMonitor legislative and administrative action related to pollinators. \nMonitor legislative and administrative action related to glyphosate regulation.\nOutreach and monitoring related to Farm bill reauthorization.\nH.R. 2, Agriculture and Nutrition Act of 2018.\nS. 3042, Agriculture Improvement Act of 2018.\nMonitor legislative and administrative action related to PRIA reauthorization.\nH.R. 1029, Pesticide Registration Improvement Extension Act of 2017.",
+          "source_url": "https://lda.gov/filings/public/filing/454f924a-dcc2-49b6-ba63-54481eac0111/print/"
+        },
+        {
+          "quarter": "2018-Q3",
+          "registrant": "GREENBERG TRAURIG, LLP",
+          "issue": "ENV",
+          "matched": [
+            "fifra",
+            "insecticide, fungicide"
+          ],
+          "excerpt": "Monitoring and Congressional outreach related to the Federal Insecticide, Fungicide, and Rodenticide Act (FIFRA).\nMonitor legislative and administrative action related to the Endangered Species Act.\nH.R. 3040, Saving Americas Pollinators Act.\nH.R. 5015, Saving Americas Pollinators Act.",
+          "source_url": "https://lda.gov/filings/public/filing/454f924a-dcc2-49b6-ba63-54481eac0111/print/"
+        },
+        {
+          "quarter": "2018-Q4",
+          "registrant": "GREENBERG TRAURIG, LLP",
+          "issue": "AGR",
+          "matched": [
+            "glyphosate",
+            "pesticide"
+          ],
+          "excerpt": "Monitor legislative and administrative action related to pollinators. \nMonitor legislative and administrative action related to glyphosate regulation.\nOutreach and monitoring related to Farm bill reauthorization.\nH.R. 2, Agriculture and Nutrition Act of 2018 (Public Law 115-334).\nS. 3042, Agriculture Improvement Act of 2018.\nMonitor legislative and administrative action related to PRIA reauthorization.\nH.R. 1029, Pesticide Registration Improvement Extension Act of 2017.",
+          "source_url": "https://lda.gov/filings/public/filing/2d8515cb-8e67-4517-855d-7fd3db5e4162/print/"
+        },
+        {
+          "quarter": "2018-Q4",
+          "registrant": "GREENBERG TRAURIG, LLP",
+          "issue": "ENV",
+          "matched": [
+            "fifra",
+            "insecticide, fungicide"
+          ],
+          "excerpt": "Monitoring and Congressional outreach related to the Federal Insecticide, Fungicide, and Rodenticide Act (FIFRA).\nMonitor legislative and administrative action related to the Endangered Species Act.",
+          "source_url": "https://lda.gov/filings/public/filing/2d8515cb-8e67-4517-855d-7fd3db5e4162/print/"
+        },
+        {
+          "quarter": "2018-Q1",
+          "registrant": "VENTURE GOVERNMENT STRATEGIES, LLC (FKA HOBART HALLAWAY & QUAYLE VENTURES, LLC)",
+          "issue": "CHM",
+          "matched": [
+            "fifra"
+          ],
+          "excerpt": "FIFRA issue",
+          "source_url": "https://lda.gov/filings/public/filing/0de00f75-5c88-4dc3-9055-1924f300dd8a/print/"
+        }
+      ]
+    },
+    "ld203": {
+      "reports": 223,
+      "itemized_contributions": 987,
+      "contribution_types": {
+        "FECA": 938,
+        "Honorary Expenses": 48,
+        "Presidential Inaugural Committee": 1
+      },
+      "sample": [
+        {
+          "date": "2018-06-18",
+          "amount": "100.00",
+          "payee": "GREEN MOUNTAIN PAC",
+          "honoree": "Senator Patrick Leahy",
+          "type": "FECA",
+          "filer": "BAYER CORPORATION (CONSOLIDATED REPORT)",
+          "lobbyist": "EDWARD BARRON",
+          "source_url": "https://lda.gov/filings/public/contribution/5ac22d67-47a3-4bcd-8897-b7f8f941d72a/print/"
+        },
+        {
+          "date": "2018-04-26",
+          "amount": "500.00",
+          "payee": "PETERSON FOR CONGRESS",
+          "honoree": "Cong. Colin Peterson",
+          "type": "FECA",
+          "filer": "BAYER CORPORATION (CONSOLIDATED REPORT)",
+          "lobbyist": "EDWARD BARRON",
+          "source_url": "https://lda.gov/filings/public/contribution/5ac22d67-47a3-4bcd-8897-b7f8f941d72a/print/"
+        },
+        {
+          "date": "2018-04-27",
+          "amount": "500.00",
+          "payee": "URSULA WOJCIECHOWSKI",
+          "honoree": "Marsha Blackburn",
+          "type": "FECA",
+          "filer": "BAYER CORPORATION (CONSOLIDATED REPORT)",
+          "lobbyist": "URSULA WOJCIECHOWSKI",
+          "source_url": "https://lda.gov/filings/public/contribution/18b903f5-2609-4787-8523-35fa5dd6b299/print/"
+        },
+        {
+          "date": "2018-05-15",
+          "amount": "1000.00",
+          "payee": "MARSHA FOR SENATE",
+          "honoree": "Marsha Blackburn",
+          "type": "FECA",
+          "filer": "BAYER CORPORATION (CONSOLIDATED REPORT)",
+          "lobbyist": "CHRISTOPHER LEAHY",
+          "source_url": "https://lda.gov/filings/public/contribution/3fd6bd2e-e358-499a-a5ca-98c3b9b5f826/print/"
+        },
+        {
+          "date": "2018-04-30",
+          "amount": "500.00",
+          "payee": "MARSHA FOR SENATE",
+          "honoree": "Marsha Blackburn",
+          "type": "FECA",
+          "filer": "BAYER CORPORATION (CONSOLIDATED REPORT)",
+          "lobbyist": "BRIAN MCCULLOUGH",
+          "source_url": "https://lda.gov/filings/public/contribution/cd36241c-9b40-45af-b84e-cd73e5c9914a/print/"
+        },
+        {
+          "date": "2018-03-13",
+          "amount": "2500.00",
+          "payee": "KEVIN MCCARTHY FOR CONGRESS",
+          "honoree": "Rep. Kevin Owen McCarthy",
+          "type": "FECA",
+          "filer": "BAYER CORPORATION (CONSOLIDATED REPORT)",
+          "lobbyist": null,
+          "source_url": "https://lda.gov/filings/public/contribution/e95fc6ac-00b6-4547-801c-266ddf8ab547/print/"
+        },
+        {
+          "date": "2018-03-01",
+          "amount": "1000.00",
+          "payee": "ALEXANDER FOR SENATE 2020 INC",
+          "honoree": "Sen. Lamar Alexander",
+          "type": "FECA",
+          "filer": "BAYER CORPORATION (CONSOLIDATED REPORT)",
+          "lobbyist": null,
+          "source_url": "https://lda.gov/filings/public/contribution/e95fc6ac-00b6-4547-801c-266ddf8ab547/print/"
+        },
+        {
+          "date": "2018-01-23",
+          "amount": "10000.00",
+          "payee": "BRYCE HARLOW FOUNDATION",
+          "honoree": "Heidi Heitkamp",
+          "type": "Honorary Expenses",
+          "filer": "BAYER CORPORATION (CONSOLIDATED REPORT)",
+          "lobbyist": null,
+          "source_url": "https://lda.gov/filings/public/contribution/e95fc6ac-00b6-4547-801c-266ddf8ab547/print/"
+        }
+      ]
+    }
+  },
+  "http_stats": {
+    "requests": 69,
+    "retries": 5,
+    "failures": 0
+  }
+}

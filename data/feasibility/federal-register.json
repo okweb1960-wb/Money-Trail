@@ -1,0 +1,196 @@
+{
+  "source": "Federal Register API",
+  "generated_at": "2026-11-12T22:44:57.299Z",
+  "window": {
+    "from": "2018-01-01",
+    "to": "2026-11-12"
+  },
+  "base_urls": [
+    "https://www.federalregister.gov/api/v1"
+  ],
+  "ok": true,
+  "checks": [
+    {
+      "name": "glyphosate executive orders",
+      "ok": true,
+      "detail": "2 presidential documents mention glyphosate; 1 are executive orders"
+    },
+    {
+      "name": "EO 14387 metadata",
+      "ok": true,
+      "detail": "signed 2026-02-18, published 2026-02-23, FR doc 2026-03628, 91 FR 8703; PDF unreachable (govinfo.gov)"
+    }
+  ],
+  "rate_limits": {
+    "observed_headers": "No API key required; no rate-limit headers observed.",
+    "documented": "Federal Register asks clients to be reasonable; this script waits 300ms between requests."
+  },
+  "gaps": [
+    "The Federal Register gives signing and publication dates but no time of day. Timeline precision is one day.",
+    "Full-text search matches the word 'glyphosate' anywhere in a document. A future EO that affects glyphosate without naming it would be missed; re-run with broader terms (pesticide, FIFRA, phosphorus) if needed.",
+    "Agency rules and notices about glyphosate (mostly EPA pesticide actions) are reachable but are not a v1 decision type. Adding them would be a new feature; ask first."
+  ],
+  "findings": {
+    "presidential_documents_mentioning_glyphosate": [
+      {
+        "title": "Promoting the National Defense by Ensuring an Adequate Supply of Elemental Phosphorus and Glyphosate- Based Herbicides",
+        "subtype": "Executive Order",
+        "document_number": "2026-03628",
+        "signing_date": "2026-02-18",
+        "publication_date": "2026-02-23",
+        "html_url": "https://www.federalregister.gov/documents/2026/02/23/2026-03628/promoting-the-national-defense-by-ensuring-an-adequate-supply-of-elemental-phosphorus-and"
+      },
+      {
+        "title": "Certifications for Major Narcotics Producing and Transit Countries",
+        "subtype": "Determination",
+        "document_number": "95-5850",
+        "signing_date": "1995-02-28",
+        "publication_date": "1995-03-09",
+        "html_url": "https://www.federalregister.gov/documents/1995/03/09/95-5850/certifications-for-major-narcotics-producing-and-transit-countries"
+      }
+    ],
+    "search_source_url": "https://www.federalregister.gov/api/v1/documents.json?conditions%5Bterm%5D=glyphosate&conditions%5Btype%5D%5B%5D=PRESDOCU&per_page=100&fields%5B%5D=title&fields%5B%5D=type&fields%5B%5D=subtype&fields%5B%5D=document_number&fields%5B%5D=publication_date&fields%5B%5D=signing_date&fields%5B%5D=executive_order_number&fields%5B%5D=presidential_document_number&fields%5B%5D=citation&fields%5B%5D=start_page&fields%5B%5D=html_url&fields%5B%5D=pdf_url&fields%5B%5D=full_text_xml_url&fields%5B%5D=body_html_url&fields%5B%5D=president&fields%5B%5D=agencies&fields%5B%5D=abstract&fields%5B%5D=executive_order_notes&fields%5B%5D=disposition_notes",
+    "executive_orders": [
+      {
+        "title": "Promoting the National Defense by Ensuring an Adequate Supply of Elemental Phosphorus and Glyphosate- Based Herbicides",
+        "executive_order_number": "14387",
+        "document_number": "2026-03628",
+        "signing_date": "2026-02-18",
+        "publication_date": "2026-02-23",
+        "citation": "91 FR 8703",
+        "president": "Donald Trump",
+        "html_url": "https://www.federalregister.gov/documents/2026/02/23/2026-03628/promoting-the-national-defense-by-ensuring-an-adequate-supply-of-elemental-phosphorus-and",
+        "pdf_url": "https://www.govinfo.gov/content/pkg/FR-2026-02-23/pdf/2026-03628.pdf",
+        "pdf_check": {
+          "error": "fetch failed",
+          "note": "PDF is hosted on govinfo.gov (GPO); not reachable from this environment. html_url and full_text_xml_url on federalregister.gov are the stored sources."
+        },
+        "full_text_xml_url": "https://www.federalregister.gov/documents/full_text/xml/2026/02/23/2026-03628.xml",
+        "executive_order_notes": "See: EO 13603, March 16, 2012",
+        "source_url": "https://www.federalregister.gov/api/v1/documents/2026-03628.json?fields%5B%5D=title&fields%5B%5D=type&fields%5B%5D=subtype&fields%5B%5D=document_number&fields%5B%5D=publication_date&fields%5B%5D=signing_date&fields%5B%5D=executive_order_number&fields%5B%5D=presidential_document_number&fields%5B%5D=citation&fields%5B%5D=start_page&fields%5B%5D=html_url&fields%5B%5D=pdf_url&fields%5B%5D=full_text_xml_url&fields%5B%5D=body_html_url&fields%5B%5D=president&fields%5B%5D=agencies&fields%5B%5D=abstract&fields%5B%5D=executive_order_notes&fields%5B%5D=disposition_notes",
+        "retrieved_at": "2026-11-12T22:44:58.567Z",
+        "later_documents_citing_it": {
+          "count": 2,
+          "items": [
+            {
+              "title": "Delegations of Authority",
+              "type": "Rule",
+              "document_number": "2026-07088",
+              "publication_date": "2026-04-13",
+              "agencies": [
+                "Agriculture Department",
+                null
+              ],
+              "html_url": "https://www.federalregister.gov/documents/2026/04/13/2026-07088/delegations-of-authority"
+            }
+          ],
+          "source_url": "https://www.federalregister.gov/api/v1/documents.json?conditions%5Bterm%5D=%22Executive+Order+14387%22&conditions%5Bpublication_date%5D%5Bgte%5D=2026-02-23&per_page=50&order=oldest&fields%5B%5D=title&fields%5B%5D=type&fields%5B%5D=document_number&fields%5B%5D=publication_date&fields%5B%5D=agencies&fields%5B%5D=html_url"
+        }
+      }
+    ],
+    "agency_documents_mentioning_glyphosate": {
+      "count": 122,
+      "newest": [
+        {
+          "title": "Pesticides; Notice of Receipt of Requests to Voluntarily Cancel Certain Pesticide Registrations and/or Amend Registrations To Terminate Certain Uses With a 30-Day Comment Period (June 2026)",
+          "type": "Notice",
+          "publication_date": "2026-11-09",
+          "agencies": [
+            "Environmental Protection Agency"
+          ],
+          "html_url": "https://www.federalregister.gov/documents/2026/11/09/2026-22769/pesticides-notice-of-receipt-of-requests-to-voluntarily-cancel-certain-pesticide-registrations-andor"
+        },
+        {
+          "title": "Glyphosate Open Literature Search To Inform Human Health Risk Assessment; Extension of Comment Period",
+          "type": "Notice",
+          "publication_date": "2026-09-28",
+          "agencies": [
+            "Environmental Protection Agency"
+          ],
+          "html_url": "https://www.federalregister.gov/documents/2026/09/28/2026-19775/glyphosate-open-literature-search-to-inform-human-health-risk-assessment-extension-of-comment-period"
+        },
+        {
+          "title": "Bayer U.S.-Crop Science: Availability of a Petition for a Determination of Nonregulated Status and Draft Plant Pest Risk Assessment for Herbicide Resistant MON 96012 Cotton (Gossypium hirsutum)",
+          "type": "Notice",
+          "publication_date": "2026-09-21",
+          "agencies": [
+            "Agriculture Department",
+            "Animal and Plant Health Inspection Service"
+          ],
+          "html_url": "https://www.federalregister.gov/documents/2026/09/21/2026-19237/bayer-us-crop-science-availability-of-a-petition-for-a-determination-of-nonregulated-status-and"
+        },
+        {
+          "title": "Hazardous Materials: Notice of Administrative Determination of Preemption for Common Law Tort Claims Concerning the Transportation of Gasoline",
+          "type": "Notice",
+          "publication_date": "2026-09-09",
+          "agencies": [
+            "Transportation Department",
+            "Pipeline and Hazardous Materials Safety Administration"
+          ],
+          "html_url": "https://www.federalregister.gov/documents/2026/09/09/2026-18382/hazardous-materials-notice-of-administrative-determination-of-preemption-for-common-law-tort-claims"
+        },
+        {
+          "title": "Glyphosate Open Literature Search To Inform Human Health Risk Assessment Notice of Availability",
+          "type": "Notice",
+          "publication_date": "2026-08-25",
+          "agencies": [
+            "Environmental Protection Agency"
+          ],
+          "html_url": "https://www.federalregister.gov/documents/2026/08/25/2026-17301/glyphosate-open-literature-search-to-inform-human-health-risk-assessment-notice-of-availability"
+        },
+        {
+          "title": "Cancellation Order for Certain Pesticide Registrations and/or Amendments To Terminate Uses (From February 19, 2026, Notice)",
+          "type": "Notice",
+          "publication_date": "2026-08-06",
+          "agencies": [
+            "Environmental Protection Agency"
+          ],
+          "html_url": "https://www.federalregister.gov/documents/2026/08/06/2026-16076/cancellation-order-for-certain-pesticide-registrations-andor-amendments-to-terminate-uses-from"
+        },
+        {
+          "title": "Bayer/Monsanto: Determination of Nonregulated Status for MON 87429 Maize Genetically Engineered for Dicamba, Glufosinate, Quizalofop, and 2,4-Dichlorophenoxyacetic Acid (2,4-D) Resistance With Tissue-Specific Glyphosate Resistance Facilitating the Production of Hybrid Maize Seed",
+          "type": "Notice",
+          "publication_date": "2026-08-05",
+          "agencies": [
+            "Agriculture Department",
+            "Animal and Plant Health Inspection Service"
+          ],
+          "html_url": "https://www.federalregister.gov/documents/2026/08/05/2026-15876/bayermonsanto-determination-of-nonregulated-status-for-mon-87429-maize-genetically-engineered-for"
+        },
+        {
+          "title": "Glyphosate From China; Termination of Investigations",
+          "type": "Notice",
+          "publication_date": "2026-07-29",
+          "agencies": [
+            "International Trade Commission"
+          ],
+          "html_url": "https://www.federalregister.gov/documents/2026/07/29/2026-15235/glyphosate-from-china-termination-of-investigations"
+        },
+        {
+          "title": "Glyphosate From China; Institution of Antidumping and Countervailing Duty Investigations and Scheduling of Preliminary Phase Investigations",
+          "type": "Notice",
+          "publication_date": "2026-07-06",
+          "agencies": [
+            "International Trade Commission"
+          ],
+          "html_url": "https://www.federalregister.gov/documents/2026/07/06/2026-13517/glyphosate-from-china-institution-of-antidumping-and-countervailing-duty-investigations-and"
+        },
+        {
+          "title": "Pesticides; Notice of Receipt of Requests To Voluntarily Cancel Certain Pesticide Registrations and/or Amend Registrations To Terminate Certain Uses With a 30-Day Comment Period (March 2026)",
+          "type": "Notice",
+          "publication_date": "2026-06-29",
+          "agencies": [
+            "Environmental Protection Agency"
+          ],
+          "html_url": "https://www.federalregister.gov/documents/2026/06/29/2026-13066/pesticides-notice-of-receipt-of-requests-to-voluntarily-cancel-certain-pesticide-registrations-andor"
+        }
+      ],
+      "source_url": "https://www.federalregister.gov/api/v1/documents.json?conditions%5Bterm%5D=glyphosate&conditions%5Bpublication_date%5D%5Bgte%5D=2018-01-01&conditions%5Btype%5D%5B%5D=RULE&conditions%5Btype%5D%5B%5D=PRORULE&conditions%5Btype%5D%5B%5D=NOTICE&per_page=20&order=newest&fields%5B%5D=title&fields%5B%5D=type&fields%5B%5D=document_number&fields%5B%5D=publication_date&fields%5B%5D=agencies&fields%5B%5D=html_url"
+    }
+  },
+  "http_stats": {
+    "requests": 5,
+    "retries": 0,
+    "failures": 0
+  }
+}

@@ -1,0 +1,687 @@
+{
+  "source": "OpenFEC API",
+  "generated_at": "2026-11-12T22:45:00.201Z",
+  "window": {
+    "from": "2018-01-01",
+    "to": "2026-11-12"
+  },
+  "base_urls": [
+    "https://api.open.fec.gov/v1"
+  ],
+  "ok": true,
+  "checks": [
+    {
+      "name": "affiliated committees",
+      "ok": true,
+      "detail": "4 committees match; 3 are PACs"
+    },
+    {
+      "name": "PAC disbursements C00042069",
+      "ok": true,
+      "detail": "590 itemized disbursements, 534 to candidates/committees, cycles 2018,2020"
+    },
+    {
+      "name": "PAC disbursements C00281162",
+      "ok": true,
+      "detail": "1701 itemized disbursements, 1662 to candidates/committees, cycles 2018,2020,2022,2024,2026"
+    },
+    {
+      "name": "employee itemized contributions",
+      "ok": true,
+      "detail": "18713 itemized 2023-24 receipts match employer 'bayer'; 64 of the 100 sampled went to an affiliated PAC"
+    }
+  ],
+  "rate_limits": {
+    "observed_x_ratelimit_limit": "60",
+    "observed_x_ratelimit_remaining_at_start": "58",
+    "note": "api.data.gov enforces per-key hourly limits; DEMO_KEY is far lower. Itemized schedule_a/schedule_b queries intermittently return 504 'Query timed out' and need retries. Pagination is keyset (last_index + last_<date>), not page numbers."
+  },
+  "gaps": [
+    "Employer is free text typed by donors ('BAYER', 'BAYER CROP SCIENCE', 'BAYER US LLC', 'SELF'...). The 'bayer' search is fuzzy and can include unrelated employers; matches need an alias list and review.",
+    "Most employee contributions go to the company's own PAC via payroll deduction. Counting them as money to officials would double count with PAC disbursements; the PAC's contributions to candidates are the cleaner signal.",
+    "FEC itemizes individual receipts only above $200 per election cycle; smaller donations are not attributable.",
+    "Contributions are linked to candidates/committees, not to decisions. The app can show timing only (e.g. a contribution date before/after a decision) and must not imply a link.",
+    "Executive-branch officials (EPA, USDA, White House, DOJ) are not FEC candidates. Contributions can only be linked to them via a campaign committee or party committee, which needs careful wording."
+  ],
+  "findings": {
+    "key_mode": "personal key (value not recorded)",
+    "committees_found": [
+      {
+        "committee_id": "C00042069",
+        "name": "BAYER CORPORATION CROP SCIENCE EMPLOYEES CITIZENSHIP FUND (BAYER CROP SCIENCE FUND)",
+        "type": "PAC - Qualified",
+        "designation": "Lobbyist/Registrant PAC",
+        "cycles": [
+          1976,
+          1978,
+          1980,
+          1982,
+          1984,
+          1986,
+          1988,
+          1990,
+          1992,
+          1994,
+          1996,
+          1998,
+          2000,
+          2002,
+          2004,
+          2006,
+          2008,
+          2010,
+          2012,
+          2014,
+          2016,
+          2018,
+          2020
+        ],
+        "source_url": "https://www.fec.gov/data/committee/C00042069/"
+      },
+      {
+        "committee_id": "C00232330",
+        "name": "BAYER CROPSCIENCE HOLDING INC POLITICAL ACTION COMMITTEE",
+        "type": "PAC - Qualified",
+        "designation": "Unauthorized",
+        "cycles": [
+          1988,
+          1990,
+          1992,
+          1994,
+          1996,
+          1998,
+          2000,
+          2002
+        ],
+        "source_url": "https://www.fec.gov/data/committee/C00232330/"
+      },
+      {
+        "committee_id": "C00243337",
+        "name": "BAYER FOR CONGRESS",
+        "type": "House",
+        "designation": "Principal campaign committee",
+        "cycles": [
+          1990,
+          1992
+        ],
+        "source_url": "https://www.fec.gov/data/committee/C00243337/"
+      },
+      {
+        "committee_id": "C00281162",
+        "name": "BAYER US LLC EMPLOYEE POLITICAL ACTION COMMITTEE (BAYERPAC)",
+        "type": "PAC - Qualified",
+        "designation": "Lobbyist/Registrant PAC",
+        "cycles": [
+          1994,
+          1996,
+          1998,
+          2000,
+          2002,
+          2004,
+          2006,
+          2008,
+          2010,
+          2012,
+          2014,
+          2016,
+          2018,
+          2020,
+          2022,
+          2024,
+          2026
+        ],
+        "source_url": "https://www.fec.gov/data/committee/C00281162/"
+      }
+    ],
+    "pacs": [
+      {
+        "committee_id": "C00042069",
+        "name": "BAYER CORPORATION CROP SCIENCE EMPLOYEES CITIZENSHIP FUND (BAYER CROP SCIENCE FUND)",
+        "name_history": [
+          {
+            "name": "MONSANTO CITIZENSHIP FUND",
+            "affiliated": null,
+            "first_cycle": 1976,
+            "last_cycle": 1994
+          },
+          {
+            "name": "MONSANTO COMPANY CITIZENSHIP FUND A/K/A MONSANTO CITIZENSHIP FUND",
+            "affiliated": "MONSANTO CO (AFF) G D SEARLE & CO",
+            "first_cycle": 1996,
+            "last_cycle": 2000
+          },
+          {
+            "name": "MONSANTO COMPANY CITIZENSHIP FUND AKA MONSANTO CITIZENSHIP FUND",
+            "affiliated": "MONSANTO COMPANY",
+            "first_cycle": 2002,
+            "last_cycle": 2016
+          },
+          {
+            "name": "BAYER CORPORATION CROP SCIENCE EMPLOYEES CITIZENSHIP FUND (BAYER CROP SCIENCE FUND)",
+            "affiliated": "BAYER CORPORATION",
+            "first_cycle": 2018,
+            "last_cycle": 2020
+          }
+        ],
+        "terminated": true,
+        "last_file_date": "2019-08-14",
+        "history_source_url": "https://api.open.fec.gov/v1/committee/C00042069/history/?per_page=50",
+        "totals_by_cycle": [
+          {
+            "cycle": 2020,
+            "receipts": 100613.3,
+            "disbursements": 280275.13,
+            "contributions_to_other_committees": -4500
+          },
+          {
+            "cycle": 2018,
+            "receipts": 761663.99,
+            "disbursements": 733713.78,
+            "contributions_to_other_committees": 506000
+          }
+        ],
+        "totals_source_url": "https://api.open.fec.gov/v1/committee/C00042069/totals/?per_page=20",
+        "itemized_disbursements": 590,
+        "to_candidates_or_committees": 534,
+        "with_candidate_id": 191,
+        "transfers_to_affiliated_committees": 6,
+        "recipients_without_fec_committee_id_likely_state_or_local": 286,
+        "has_dates": 534,
+        "has_pdf_url": 534,
+        "date_range": {
+          "first": "2017-03-22",
+          "last": "2019-07-23"
+        },
+        "top_recipients_by_amount": [
+          [
+            "BAYER U.S. LLC POLITICAL ACTION COMMITTEE",
+            278600.18
+          ],
+          [
+            "FRIENDS OF ROY BLUNT",
+            16200
+          ],
+          [
+            "RAINES, JOHN M",
+            12500
+          ],
+          [
+            "MIKE NAIG FOR IOWA AGRICULTURE",
+            10000
+          ],
+          [
+            "MCCASKILL VICTORY FUND",
+            10000
+          ],
+          [
+            "ADRIAN SMITH FOR CONGRESS",
+            10000
+          ],
+          [
+            "VALLEY POLITICAL ACTION COMMITTEE",
+            10000
+          ],
+          [
+            "AMERIPAC: THE FUND FOR A GREATER AMERICA",
+            10000
+          ],
+          [
+            "KEVIN MCCARTHY FOR CONGRESS",
+            10000
+          ],
+          [
+            "RODNEY FOR CONGRESS",
+            10000
+          ]
+        ],
+        "sample": [
+          {
+            "date": "2018-12-17",
+            "amount": 500,
+            "recipient": "SORENSEN FOR IOWA",
+            "recipient_committee_id": null,
+            "candidate": null,
+            "candidate_id": null,
+            "office": null,
+            "state": null,
+            "pdf_url": "http://docquery.fec.gov/cgi-bin/fecimg/?201901239143925501"
+          },
+          {
+            "date": "2018-12-17",
+            "amount": 500,
+            "recipient": "PHIL THOMPSON FOR IOWA AGRICULTURE",
+            "recipient_committee_id": null,
+            "candidate": null,
+            "candidate_id": null,
+            "office": null,
+            "state": null,
+            "pdf_url": "http://docquery.fec.gov/cgi-bin/fecimg/?201901239143925500"
+          },
+          {
+            "date": "2018-12-17",
+            "amount": 500,
+            "recipient": "PAUSTIAN FOR STATE HOUSE",
+            "recipient_committee_id": null,
+            "candidate": null,
+            "candidate_id": null,
+            "office": null,
+            "state": null,
+            "pdf_url": "http://docquery.fec.gov/cgi-bin/fecimg/?201901239143925500"
+          },
+          {
+            "date": "2018-12-17",
+            "amount": 500,
+            "recipient": "KENAN JUDGE FOR IOWANS",
+            "recipient_committee_id": null,
+            "candidate": null,
+            "candidate_id": null,
+            "office": null,
+            "state": null,
+            "pdf_url": "http://docquery.fec.gov/cgi-bin/fecimg/?201901239143925500"
+          },
+          {
+            "date": "2018-12-17",
+            "amount": 500,
+            "recipient": "JONES FOR IOWA",
+            "recipient_committee_id": null,
+            "candidate": null,
+            "candidate_id": null,
+            "office": null,
+            "state": null,
+            "pdf_url": "http://docquery.fec.gov/cgi-bin/fecimg/?201901239143925499"
+          }
+        ],
+        "query_timeouts_after_retries": 0
+      },
+      {
+        "committee_id": "C00232330",
+        "name": "BAYER CROPSCIENCE HOLDING INC POLITICAL ACTION COMMITTEE",
+        "name_history": [
+          {
+            "name": "RHONE-POULENC INC POLITICAL ACTION COMMITTEE (RPAC)",
+            "affiliated": "RHONE-POULENC INC",
+            "first_cycle": 1988,
+            "last_cycle": 1998
+          },
+          {
+            "name": "AVENTIS CROPSCIENCE USA HOLDING INC PAC",
+            "affiliated": "AVENTIS CROPSCIENCE USA HOLDING INC",
+            "first_cycle": 2000,
+            "last_cycle": 2000
+          },
+          {
+            "name": "BAYER CROPSCIENCE HOLDING INC POLITICAL ACTION COMMITTEE",
+            "affiliated": "AVENTIS CROPSCIENCE USA HOLDING II INC",
+            "first_cycle": 2002,
+            "last_cycle": 2002
+          }
+        ],
+        "terminated": true,
+        "last_file_date": "2003-01-17",
+        "history_source_url": "https://api.open.fec.gov/v1/committee/C00232330/history/?per_page=50",
+        "note": "no activity cycles >= 2018"
+      },
+      {
+        "committee_id": "C00281162",
+        "name": "BAYER US LLC EMPLOYEE POLITICAL ACTION COMMITTEE (BAYERPAC)",
+        "name_history": [
+          {
+            "name": "MILES INC POLITICAL ACTION COMMITTEE (MIPAC)",
+            "affiliated": "MILES INC",
+            "first_cycle": 1994,
+            "last_cycle": 1994
+          },
+          {
+            "name": "BAYER CORPORATION POLITICAL ACTION COMMITTEE",
+            "affiliated": "MILES INC",
+            "first_cycle": 1996,
+            "last_cycle": 2016
+          },
+          {
+            "name": "BAYER U.S. LLC POLITICAL ACTION COMMITTEE",
+            "affiliated": "BAYER U.S. LLC",
+            "first_cycle": 2018,
+            "last_cycle": 2020
+          },
+          {
+            "name": "BAYER US LLC EMPLOYEE POLITICAL ACTION COMMITTEE (BAYERPAC)",
+            "affiliated": "BAYER US LLC",
+            "first_cycle": 2022,
+            "last_cycle": 2026
+          }
+        ],
+        "terminated": false,
+        "last_file_date": "2026-10-19",
+        "history_source_url": "https://api.open.fec.gov/v1/committee/C00281162/history/?per_page=50",
+        "totals_by_cycle": [
+          {
+            "cycle": 2026,
+            "receipts": 586252.68,
+            "disbursements": 646335.19,
+            "contributions_to_other_committees": 345546.57
+          },
+          {
+            "cycle": 2024,
+            "receipts": 656681.98,
+            "disbursements": 568907.68,
+            "contributions_to_other_committees": 317035.73
+          },
+          {
+            "cycle": 2022,
+            "receipts": 436849.65,
+            "disbursements": 534218.36,
+            "contributions_to_other_committees": 341500
+          },
+          {
+            "cycle": 2020,
+            "receipts": 768774.66,
+            "disbursements": 632521.25,
+            "contributions_to_other_committees": 430900
+          },
+          {
+            "cycle": 2018,
+            "receipts": 354241.56,
+            "disbursements": 297850,
+            "contributions_to_other_committees": 284000
+          }
+        ],
+        "totals_source_url": "https://api.open.fec.gov/v1/committee/C00281162/totals/?per_page=20",
+        "itemized_disbursements": 1701,
+        "to_candidates_or_committees": 1662,
+        "with_candidate_id": 740,
+        "transfers_to_affiliated_committees": 16,
+        "recipients_without_fec_committee_id_likely_state_or_local": 808,
+        "has_dates": 1662,
+        "has_pdf_url": 1662,
+        "date_range": {
+          "first": "2017-01-16",
+          "last": "2026-09-09"
+        },
+        "top_recipients_by_amount": [
+          [
+            "BAYER US LLC MISSOURI PAC",
+            177500
+          ],
+          [
+            "NEW DEMOCRAT COALITION ACTION FUND",
+            35000
+          ],
+          [
+            "CHC BOLD PAC",
+            35000
+          ],
+          [
+            "GUTHRIE FOR CONGRESS",
+            34500
+          ],
+          [
+            "SIMPSON FOR CONGRESS",
+            29500
+          ],
+          [
+            "ANN WAGNER FOR CONGRESS",
+            28000
+          ],
+          [
+            "JIM COSTA FOR CONGRESS",
+            26000
+          ],
+          [
+            "CONGRESSIONAL BLACK CAUCUS PAC",
+            25000
+          ],
+          [
+            "KURT SCHRADER FOR CONGRESS",
+            23500
+          ],
+          [
+            "MIKIE SHERRILL FOR CONGRESS",
+            23500
+          ]
+        ],
+        "sample": [
+          {
+            "date": "2018-11-05",
+            "amount": 1000,
+            "recipient": "TEXANS FOR SENATOR JOHN CORNYN INC",
+            "recipient_committee_id": "C00369033",
+            "candidate": "CORNYN, JOHN III",
+            "candidate_id": "S2TX00106",
+            "office": "S",
+            "state": "TX",
+            "pdf_url": "http://docquery.fec.gov/cgi-bin/fecimg/?201811279133845032"
+          },
+          {
+            "date": "2018-11-05",
+            "amount": 1000,
+            "recipient": "LATTA FOR CONGRESS",
+            "recipient_committee_id": "C00438697",
+            "candidate": "LATTA, ROBERT E.",
+            "candidate_id": "H8OH05036",
+            "office": "H",
+            "state": "OH",
+            "pdf_url": "http://docquery.fec.gov/cgi-bin/fecimg/?201811279133845032"
+          },
+          {
+            "date": "2018-10-04",
+            "amount": 500,
+            "recipient": "MIKE FOLMER FOR STATE SENATE",
+            "recipient_committee_id": null,
+            "candidate": null,
+            "candidate_id": null,
+            "office": null,
+            "state": null,
+            "pdf_url": "http://docquery.fec.gov/cgi-bin/fecimg/?201810189125608798"
+          },
+          {
+            "date": "2018-10-04",
+            "amount": 500,
+            "recipient": "FRIENDS OF RICH ALLOWAY",
+            "recipient_committee_id": null,
+            "candidate": null,
+            "candidate_id": null,
+            "office": null,
+            "state": null,
+            "pdf_url": "http://docquery.fec.gov/cgi-bin/fecimg/?201810189125608798"
+          },
+          {
+            "date": "2018-10-04",
+            "amount": 500,
+            "recipient": "FRIENDS FOR JUDY SCHWANK",
+            "recipient_committee_id": null,
+            "candidate": null,
+            "candidate_id": null,
+            "office": null,
+            "state": null,
+            "pdf_url": "http://docquery.fec.gov/cgi-bin/fecimg/?201810189125608798"
+          }
+        ],
+        "query_timeouts_after_retries": 0
+      }
+    ],
+    "employee_contributions_by_employer": {
+      "by_cycle": {
+        "2018": {
+          "total": 1059303.3799999997,
+          "count": 21828,
+          "employer_strings": 157
+        },
+        "2020": {
+          "total": 935887.39,
+          "count": 26355,
+          "employer_strings": 122
+        },
+        "2022": {
+          "total": 460068.58999999997,
+          "count": 12378,
+          "employer_strings": 100
+        },
+        "2024": {
+          "total": 794427.7000000003,
+          "count": 15749,
+          "employer_strings": 94
+        },
+        "2026": {
+          "total": 444262.2999999999,
+          "count": 8347,
+          "employer_strings": 77
+        }
+      },
+      "distinct_employer_strings_kept": [
+        "BAYER U.S. LLC",
+        "BAYER CORPORATION",
+        "BAYER",
+        "BAYER HEALTHCARE",
+        "BAYER CORP",
+        "BAYER CROPSCIENCE",
+        "BAYER INC",
+        "BAYER INTERNATIONAL TRADE",
+        "BAYER CORPSCIENCE",
+        "BAYER HEALTHCARE PHARMACEUTICALS",
+        "BAYER CROPSCIENCE LP",
+        "BAYER CROP SCIENCE",
+        "BAYER LYMPHOMA FRANCHISE",
+        "BAYER CORP SCIENCE",
+        "BAYER CORPORTATION",
+        "BAYER CONSUMER HEALTH",
+        "BAYER LLC",
+        "BAYER HEALTHCARE, BERKELEY CA",
+        "BAYER US",
+        "BAYER US LLC",
+        "BAYER ANIMAL HEALTH",
+        "BAYER CROPSCIENCE LP USA",
+        "BAYER CROP",
+        "BAYER CHEMICAL",
+        "BAYER HEALTH CARE PHARMACEUTICALS",
+        "BAYER PHARMA",
+        "MONSANTO",
+        "MONSANTO COMPANY",
+        "MONSANTO CO.",
+        "MONSANTO CHEMIST",
+        "MONSANTO/BAYER",
+        "MONSANTO CO",
+        "BAYER US, LLC",
+        "BAYER PHARMACEUTICAL",
+        "BAYER PHARMACEUTICALS",
+        "BAYER U.S.",
+        "BAYER AG",
+        "BAYER HEALTHCARE LLC",
+        "BAYER CROP SCIENCE US",
+        "BAYER HEALTH CARE, LLC",
+        "BAYER CROPSCIENCE LLC",
+        "BAYER CONSUMER HEALTH LLC"
+      ],
+      "employer_strings_excluded_for_review": [
+        "BAYER PROPERTIES, LLC",
+        "JENNA BAYER GARDEN DESIGN, INC.",
+        "BAYER PROPERTIES",
+        "BAYER CONSTRUCTION CO INC",
+        "BAYER PROPERTIES LLC",
+        "JENNA BAYER GARDEN DESIGN INC.",
+        "MONSANTO CITIZENSHIP FUND",
+        "PFIZER MONSANTO",
+        "BAYER HVAC",
+        "BAYER VENTURES",
+        "BAYER R&D SERVICES LLC",
+        "BAYER CONSTRUCTION COMPANY",
+        "BAYER BUILT",
+        "BAYER HFCU",
+        "BAYER-POST ENTERPRISES, INC.",
+        "BAYER BUILT WOODWORKS",
+        "MONSANTO CORPORATION",
+        "MONSANTO LLC",
+        "MONSANTO TECHNOLOGY LLC",
+        "HGS/MONSANTO",
+        "ICL SPECIALTY (FORMERLY MONSANTO COMPA",
+        "BAYER MONSANTO",
+        "MONSANTO REALTY INVESTOR",
+        "BAYER-MONSANTO",
+        "GARVEY SCHUBERT BAYER",
+        "BAYER REALTY",
+        "BAYER AUTOMOTIVE",
+        "BAYER COMPANY",
+        "BAYER ENVIRONMENTAL SCIENCE",
+        "MOISES MONSANTO, EXXON",
+        "PFIZER/MONSANTO",
+        "MOISES MONSANTO EXXON",
+        "MONSANTO BIOAG",
+        "RET MONSANTO",
+        "BAYER VENTURES LLC",
+        "BAYER VENTURES, LLC",
+        "BAYER INT WOODS",
+        "HEIDI BAYER",
+        "BAYER INTERIOR WOOD",
+        "BAYER HERITAGE FCU",
+        "BAYER INTERIOR",
+        "MONSANTO RESEARCH",
+        "MONSANTO BIO",
+        "SEAN MONSANTO",
+        "JUDITH BAYER",
+        "BAYER FARMS",
+        "ALLETTA BAYER",
+        "PAMELA BAYER",
+        "BENNETT E. BAYER",
+        "BAYER NORTHERN PRODUCTION",
+        "JEFF BAYER",
+        "BAYER MOTOR",
+        "JENNA BAYER GARDEN DESIGN INC",
+        "MONSANTO INC."
+      ],
+      "caution": "Totals include contributions to the company's own PAC and to conduits (ActBlue/WinRed); they are not money to officials."
+    },
+    "employee_itemized_sample_2024": {
+      "total_matching_rows": 18713,
+      "sample_size": 100,
+      "share_to_affiliated_pac": "64/100",
+      "employer_text_not_matching_bayer": 4,
+      "examples": [
+        {
+          "date": "2024-12-31",
+          "amount": 5,
+          "employer": "BAYER",
+          "occupation": "ENGINEER",
+          "recipient": "ACTBLUE",
+          "pdf_url": "https://docquery.fec.gov/cgi-bin/fecimg/?202501319749969667"
+        },
+        {
+          "date": "2024-12-31",
+          "amount": 25,
+          "employer": "BAYER",
+          "occupation": "MARKET RESEARCH",
+          "recipient": "ACTBLUE",
+          "pdf_url": "https://docquery.fec.gov/cgi-bin/fecimg/?202501319749788269"
+        },
+        {
+          "date": "2024-12-31",
+          "amount": 100,
+          "employer": "BAYER",
+          "occupation": "ENGINEER",
+          "recipient": "ACTBLUE",
+          "pdf_url": "https://docquery.fec.gov/cgi-bin/fecimg/?202501319749628463"
+        },
+        {
+          "date": "2024-12-31",
+          "amount": 10,
+          "employer": "BAYER",
+          "occupation": "ENGINEER",
+          "recipient": "ACTBLUE",
+          "pdf_url": "https://docquery.fec.gov/cgi-bin/fecimg/?202501319749628462"
+        },
+        {
+          "date": "2024-12-31",
+          "amount": 25,
+          "employer": "BAYER",
+          "occupation": "MARKET RESEARCH",
+          "recipient": "DNC SERVICES CORP / DEMOCRATIC NATIONAL COMMITTEE",
+          "pdf_url": "https://docquery.fec.gov/cgi-bin/fecimg/?202501319752436098"
+        }
+      ],
+      "source_url": "https://api.open.fec.gov/v1/schedules/schedule_a/?contributor_employer=bayer&two_year_transaction_period=2024&is_individual=true&per_page=100"
+    }
+  },
+  "http_stats": {
+    "requests": 45,
+    "retries": 0,
+    "failures": 0
+  }
+}
