@@ -1,0 +1,274 @@
+{
+  "_comment": "Case configuration. Only identifiers and search patterns live here; every date, title and amount is read from the fetched source documents. Each docket pattern is checked against the docket text at load time.",
+  "slug": "glyphosate",
+  "title": "Glyphosate",
+  "window_from_year": 2018,
+  "company": {
+    "id": "company:bayer",
+    "name": "Bayer (U.S. entities, incl. former Monsanto Company)"
+  },
+  "lda_client_search_terms": [
+    "Bayer",
+    "Monsanto"
+  ],
+  "fec_committee_ids": [
+    "C00281162",
+    "C00042069"
+  ],
+  "scotus": {
+    "docket": "24-1068",
+    "expect_petitioner": "Monsanto",
+    "expect_respondent": "Durnell"
+  },
+  "federal_register": {
+    "search_term": "glyphosate",
+    "type": "PRESDOCU",
+    "subtype": "Executive Order"
+  },
+  "decisions": [
+    {
+      "key": "petition",
+      "match": "^Petition for a writ of certiorari filed",
+      "kind": "court_event",
+      "tier": "event",
+      "dateKind": "filed",
+      "decidedBy": "Monsanto Company (petitioner)",
+      "title": "Certiorari petition filed"
+    },
+    {
+      "key": "cvsg",
+      "match": "Solicitor General is invited",
+      "kind": "court_order",
+      "tier": "event",
+      "dateKind": "ordered",
+      "decidedBy": "Supreme Court of the United States",
+      "title": "Court invites the Solicitor General's views"
+    },
+    {
+      "key": "us_brief_cert",
+      "match": "Brief amicus curiae of (the )?United States filed",
+      "nth": 0,
+      "kind": "court_brief",
+      "tier": "decision",
+      "dateKind": "filed",
+      "decidedBy": "U.S. Department of Justice, Office of the Solicitor General",
+      "title": "U.S. amicus brief (certiorari stage)",
+      "conclusionPattern": "CONCLUSION\\s+(.+?)\\s+Respectfully",
+      "ldaEntities": [
+        "Justice, Dept of (DOJ)"
+      ],
+      "bodyKeywords": [
+        "justice",
+        "solicitor general",
+        "attorney general",
+        "\\bdoj\\b"
+      ]
+    },
+    {
+      "key": "cert_granted",
+      "match": "^Petition GRANTED",
+      "kind": "court_order",
+      "tier": "event",
+      "dateKind": "ordered",
+      "decidedBy": "Supreme Court of the United States",
+      "title": "Certiorari granted"
+    },
+    {
+      "key": "eo",
+      "source": "federal_register",
+      "kind": "executive_order",
+      "tier": "decision",
+      "dateKind": "signed",
+      "decidedBy": "President of the United States",
+      "ldaEntities": [
+        "Executive Office of the President (EOP)",
+        "White House Office",
+        "Office of Management & Budget (OMB)",
+        "Natl Economic Council (NEC)",
+        "Natl Security Council (NSC)"
+      ],
+      "bodyKeywords": [
+        "white house",
+        "executive office of the president",
+        "\\beop\\b",
+        "national economic council",
+        "office of management and budget",
+        "\\bomb\\b",
+        "national security council",
+        "president"
+      ]
+    },
+    {
+      "key": "us_brief_merits",
+      "match": "Brief amicus curiae of (the )?United States filed",
+      "nth": 1,
+      "kind": "court_brief",
+      "tier": "decision",
+      "dateKind": "filed",
+      "decidedBy": "U.S. Department of Justice, Office of the Solicitor General",
+      "title": "U.S. amicus brief (merits stage)",
+      "conclusionPattern": "CONCLUSION\\s+(.+?)\\s+Respectfully",
+      "ldaEntities": [
+        "Justice, Dept of (DOJ)"
+      ],
+      "bodyKeywords": [
+        "justice",
+        "solicitor general",
+        "attorney general",
+        "\\bdoj\\b"
+      ]
+    },
+    {
+      "key": "sg_argument",
+      "match": "Motion of the Solicitor General for leave to participate in oral argument .* GRANTED",
+      "kind": "court_order",
+      "tier": "event",
+      "dateKind": "ordered",
+      "decidedBy": "Supreme Court of the United States",
+      "title": "Solicitor General allowed to argue as amicus"
+    },
+    {
+      "key": "argued",
+      "match": "^Argued\\.",
+      "kind": "court_event",
+      "tier": "event",
+      "dateKind": "argued",
+      "decidedBy": "Supreme Court of the United States",
+      "title": "Oral argument"
+    },
+    {
+      "key": "opinion",
+      "match": "^Judgment (REVERSED|AFFIRMED|VACATED)",
+      "kind": "court_ruling",
+      "tier": "decision",
+      "dateKind": "decided",
+      "decidedBy": "Supreme Court of the United States",
+      "title": "Supreme Court opinion",
+      "ldaEntities": []
+    },
+    {
+      "key": "mandate",
+      "match": "^Judgment and Mandate Issued",
+      "kind": "court_event",
+      "tier": "event",
+      "dateKind": "issued",
+      "decidedBy": "Supreme Court of the United States",
+      "title": "Judgment and mandate issued"
+    }
+  ],
+  "officials": [
+    {
+      "id": "official:us-sg",
+      "name": "U.S. Solicitor General (Department of Justice)",
+      "role": "Filed the U.S. amicus briefs",
+      "links": [
+        {
+          "decision": "us_brief_cert",
+          "type": "filed_in"
+        },
+        {
+          "decision": "us_brief_merits",
+          "type": "filed_in"
+        }
+      ]
+    },
+    {
+      "id": "official:president",
+      "name": "President of the United States",
+      "role": "Signed the executive order",
+      "links": [
+        {
+          "decision": "eo",
+          "type": "issued"
+        }
+      ]
+    },
+    {
+      "id": "official:scotus",
+      "name": "Supreme Court of the United States",
+      "role": "Decided the case",
+      "links": [
+        {
+          "decision": "opinion",
+          "type": "issued"
+        }
+      ]
+    },
+    {
+      "id": "official:amicus-booker",
+      "docketMatch": "Brief amicus curiae of United States Senator Cory Booker filed",
+      "name": "U.S. Senator Cory Booker",
+      "role": "Filed an amicus brief",
+      "fec": {
+        "name": "BOOKER",
+        "office": "S"
+      },
+      "links": [
+        {
+          "decision": "opinion",
+          "type": "filed_in"
+        }
+      ]
+    },
+    {
+      "id": "official:amicus-mo-legislators",
+      "docketMatch": "Brief amici curiae of Missouri State Senator Jason Bean, et al\\. filed",
+      "name": "Missouri State Senator Jason Bean, et al.",
+      "role": "Filed an amicus brief (state officials; no FEC records)",
+      "links": [
+        {
+          "decision": "opinion",
+          "type": "filed_in"
+        }
+      ]
+    },
+    {
+      "id": "official:amicus-36-legislators",
+      "docketMatch": "Brief amici curiae of 36 State Legislators filed",
+      "name": "36 State Legislators",
+      "role": "Filed an amicus brief (state officials; no FEC records)",
+      "links": [
+        {
+          "decision": "opinion",
+          "type": "filed_in"
+        }
+      ]
+    },
+    {
+      "id": "official:amicus-nebraska",
+      "docketMatch": "Brief amici curiae of Nebraska, et al\\. filed",
+      "name": "Nebraska, et al. (states)",
+      "role": "Filed an amicus brief",
+      "links": [
+        {
+          "decision": "opinion",
+          "type": "filed_in"
+        }
+      ]
+    },
+    {
+      "id": "official:amicus-texas",
+      "docketMatch": "Brief amici curiae of Texas, et al\\. filed",
+      "name": "Texas, et al. (states)",
+      "role": "Filed an amicus brief",
+      "links": [
+        {
+          "decision": "opinion",
+          "type": "filed_in"
+        }
+      ]
+    },
+    {
+      "id": "official:amicus-new-mexico",
+      "docketMatch": "Brief amici curiae of New Mexico, et al\\. filed",
+      "name": "New Mexico, et al. (states)",
+      "role": "Filed an amicus brief",
+      "links": [
+        {
+          "decision": "opinion",
+          "type": "filed_in"
+        }
+      ]
+    }
+  ]
+}

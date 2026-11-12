@@ -5,4 +5,12 @@ node_modules/
 .next/
 *.db
 *.db-journal
-data/raw/
+# next.js
+/.next/
+/out/
+next-env.d.ts
+*.tsbuildinfo
+/coverage
+# prisma
+/prisma/*.db*
+/src/generated/

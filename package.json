@@ -3,18 +3,54 @@
   "version": "1.0.0",
   "description": "Nonpartisan money & influence tracker. v1: glyphosate case.",
   "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
     "feasibility": "tsx scripts/feasibility/run-all.ts",
     "feasibility:lda": "tsx scripts/feasibility/lda.ts",
     "feasibility:fec": "tsx scripts/feasibility/fec.ts",
     "feasibility:fr": "tsx scripts/feasibility/federal-register.ts",
     "feasibility:scotus": "tsx scripts/feasibility/scotus.ts",
-    "typecheck": "tsc -p ."
+    "typecheck": "tsc -p .",
+    "fetch": "tsx scripts/fetch/run-all.ts",
+    "fetch:lda": "tsx scripts/fetch/lda.ts",
+    "fetch:fec": "tsx scripts/fetch/fec.ts",
+    "fetch:scotus": "tsx scripts/fetch/scotus.ts",
+    "fetch:fr": "tsx scripts/fetch/federal-register.ts",
+    "review:generate": "tsx scripts/review/generate.ts",
+    "db:push": "prisma db push",
+    "db:generate": "prisma generate",
+    "db:load": "tsx scripts/load.ts",
+    "flags": "tsx scripts/flags.ts",
+    "data": "npm run db:push && npm run db:load && npm run flags",
+    "test": "tsx --test src/lib/**/*.test.ts",
+    "lint:copy": "tsx scripts/lint-copy.ts",
+    "postinstall": "prisma generate"
   },
   "devDependencies": {
+    "@tailwindcss/turbopack": "4.3.3",
+    "@types/cytoscape": "^3.21.9",
     "@types/node": "^26.6.6",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.4.6",
+    "prisma": "^7.10.1",
+    "tailwindcss": "4.3.3",
     "tsx": "^4.23.15",
-    "typescript": "^7.0.2"
+    "typescript": "^5"
   },
   "private": true,
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "@libsql/client": "^0.18.0",
+    "@prisma/adapter-libsql": "^7.10.1",
+    "@prisma/client": "^7.10.1",
+    "cytoscape": "^3.35.0",
+    "next": "16.4.6",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "recharts": "^3.10.1"
+  }
 }

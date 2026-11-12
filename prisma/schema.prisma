@@ -1,0 +1,218 @@
+// Money Trail — v1 data model.
+// Every fact row carries sourceUrl + retrievedAt (NOT NULL) and a verification state.
+// JSON-shaped fields are stored as String for SQLite portability.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+enum EntityKind {
+  company
+  lobbying_firm
+  lobbyist
+  official
+  committee
+}
+
+enum DecisionKind {
+  executive_order
+  court_brief
+  court_ruling
+  court_order // case events: CVSG invitation, cert grant, argument motions
+  court_event // case events: petition filed, argument, mandate
+}
+
+enum DecisionTier {
+  decision // shown as a decision line on the timeline and used by pattern flags
+  event    // lighter case context; not used by pattern flags
+}
+
+enum FilingKind {
+  lobbying
+  contribution
+}
+
+enum EdgeType {
+  lobbied_for    // lobbying_firm -> company (client)
+  employed_by    // lobbyist -> lobbying_firm (registrant)
+  contributed_to // committee -> official / committee
+  issued         // official -> decision (stored with decisionId)
+  filed_in       // official -> decision (amicus / party brief)
+  affiliated_with // committee (PAC) -> company
+  prior_role     // lobbyist -> (text only; see covered position)
+}
+
+enum Verification {
+  verified
+  unverified
+}
+
+enum ReviewStatus {
+  approved // a person approved this in data/review/*.csv
+  proposed // machine-proposed, awaiting review
+  rejected
+}
+
+enum ClaimStatus {
+  supported_by_record
+  partially_supported
+  not_supported_by_record
+  not_addressed_by_record
+  unreviewed
+}
+
+model Entity {
+  id           String       @id
+  kind         EntityKind
+  name         String
+  subtitle     String?
+  externalIds  String       @default("{}")
+  review       ReviewStatus @default(proposed)
+  sourceUrl    String
+  retrievedAt  DateTime
+  verification Verification @default(verified)
+  aliases      Alias[]
+  edgesFrom    Edge[]       @relation("from")
+  edgesTo      Edge[]       @relation("to")
+}
+
+model Alias {
+  id       String       @id @default(cuid())
+  entityId String
+  entity   Entity       @relation(fields: [entityId], references: [id])
+  alias    String
+  source   String // lda_client | fec_employer | fec_committee
+  review   ReviewStatus @default(proposed)
+
+  @@unique([alias, source])
+}
+
+model Decision {
+  id           String       @id
+  caseSlug     String
+  kind         DecisionKind
+  tier         DecisionTier
+  title        String
+  identifier   String
+  date         DateTime
+  dateKind     String // signed | published | filed | decided | ordered | argued | issued
+  summary      String? // quote from the source document
+  quoteSource  String? // URL of the document the summary quotes
+  decidedBy    String // body that made/filed it, as the source names it
+  ldaEntities  String       @default("[]") // LDA government-entity names that correspond to decidedBy (methodology)
+  sourceUrl    String
+  retrievedAt  DateTime
+  verification Verification @default(verified)
+}
+
+model Filing {
+  id           String       @id
+  kind         FilingKind
+  externalId   String
+  quarter      String? // e.g. 2025-Q3 (LD-2) or contribution quarter
+  periodStart  DateTime?
+  periodEnd    DateTime?
+  date         DateTime?
+  amount       Float?
+  amountKind   String // lda_income | lda_expenses | fec_disbursement | ld203_contribution
+  registrant   String?
+  client       String?
+  recipient    String?
+  description  String?
+  payload      String       @default("{}")
+  sourceUrl    String
+  retrievedAt  DateTime
+  verification Verification @default(verified)
+  activities   Activity[]
+
+  @@index([kind, quarter])
+}
+
+// One lobbying activity line on an LD-2 (issue code + description + lobbyists + agencies).
+model Activity {
+  id          String       @id
+  filingId    String
+  filing      Filing       @relation(fields: [filingId], references: [id])
+  quarter     String
+  issueCode   String
+  issueName   String
+  description String
+  govEntities String       @default("[]")
+  lobbyistIds String       @default("[]") // LDA lobbyist ids listed on this activity
+  relevance   String // glyphosate_direct | pesticide_policy | general
+  review      ReviewStatus @default(proposed)
+  matched     String       @default("[]")
+  sourceUrl   String
+  retrievedAt DateTime
+}
+
+model Edge {
+  id           String       @id
+  type         EdgeType
+  fromId       String
+  toId         String? // null when the edge points at a decision (decisionId)
+  from         Entity       @relation("from", fields: [fromId], references: [id])
+  to           Entity?      @relation("to", fields: [toId], references: [id])
+  decisionId   String?
+  filingId     String?
+  amount       Float?
+  date         DateTime?
+  note         String?
+  sourceUrl    String
+  retrievedAt  DateTime
+  verification Verification @default(verified)
+}
+
+// Covered positions (prior government jobs) as stated verbatim on LD-2 filings.
+model CoveredPosition {
+  id          String   @id @default(cuid())
+  lobbyistId  String
+  text        String
+  firstQuarter String
+  lastQuarter String
+  sourceUrl   String
+  retrievedAt DateTime
+
+  @@unique([lobbyistId, text])
+}
+
+model Claim {
+  id                String      @id
+  caseSlug          String
+  speaker           String
+  venue             String
+  statement         String
+  timestamp         String?
+  status            ClaimStatus @default(unreviewed)
+  recordShows       String? // JSON array of {text, refs:[url]}
+  recordDoesNotShow String? // JSON array of {text, refs:[url]}
+  sourceUrl         String
+  retrievedAt       DateTime
+}
+
+model PatternFlag {
+  id         String   @id
+  caseSlug   String
+  rule       String
+  subjectId  String
+  decisionId String?
+  window     String
+  observed   String // JSON
+  baseline   String // JSON
+  evidence   String // JSON array of {label, url}
+  wording    String
+  pendingReview Boolean @default(false)
+  computedAt DateTime
+}
+
+model DataRun {
+  id         String   @id
+  source     String
+  ranAt      DateTime
+  notes      String?
+}
