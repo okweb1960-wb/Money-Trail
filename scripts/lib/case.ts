@@ -20,7 +20,7 @@ export interface CaseOfficialCfg {
   name: string;
   role: string;
   docketMatch?: string;
-  fec?: { name: string; office: "S" | "H" | "P" };
+  fec?: { name: string; first: string; office: "S" | "H" | "P" };
   links: Array<{ decision: string; type: "filed_in" | "issued" }>;
 }
 export interface CaseCfg {

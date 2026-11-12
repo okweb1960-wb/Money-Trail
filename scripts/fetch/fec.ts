@@ -9,6 +9,10 @@ import { loadCase, CURRENT_YEAR } from "../lib/case";
 const BASE = "https://api.open.fec.gov/v1";
 const OPTS = { headers: { "X-Api-Key": process.env.FEC_API_KEY || "DEMO_KEY" }, minDelayMs: 300, retries: 6 };
 
+// Keep only the fields the loader and the UI use (keeps the committed snapshot small).
+export const DISB_FIELDS = ["sub_id", "transaction_id", "memo_code", "disbursement_date", "disbursement_amount", "disbursement_description", "recipient_name", "recipient_committee_id", "recipient_state", "candidate_id", "candidate_name", "candidate_office", "candidate_office_state", "entity_type", "pdf_url", "image_number", "report_year", "report_type"];
+const pick = (d: any) => Object.fromEntries(DISB_FIELDS.map((k) => [k, d[k] ?? null]));
+
 async function main() {
   const c = loadCase();
   const started = new Date().toISOString();
@@ -31,7 +35,7 @@ async function main() {
       for (let page = 0; page < 60; page++) {
         const url = `${BASE}/schedules/schedule_b/?${qs({ committee_id: id, two_year_transaction_period: cycle, per_page: 100, ...last })}`;
         const r = await get(url);
-        for (const d of r.data.results) disb.push({ ...d, _source_url: url, _retrieved_at: r.retrieved_at });
+        for (const d of r.data.results) disb.push({ ...pick(d), _source_url: url, _retrieved_at: r.retrieved_at });
         const li = r.data.pagination.last_indexes;
         if (!li || r.data.results.length < 100) break;
         last = { last_index: li.last_index, last_disbursement_date: li.last_disbursement_date };
@@ -44,7 +48,7 @@ async function main() {
   // FEC candidate records for officials in the case config (by name + office).
   const candidates: any[] = [];
   for (const o of c.officials.filter((x) => x.fec)) {
-    const r = await get(`${BASE}/candidates/search/?${qs({ name: o.fec!.name, office: o.fec!.office, per_page: 20, sort: "-last_file_date" })}`);
+    const r = await get(`${BASE}/candidates/search/?${qs({ name: o.fec!.name, office: o.fec!.office, per_page: 20 })}`);
     candidates.push({ official_id: o.id, query_url: r.url, retrieved_at: r.retrieved_at, results: r.data.results });
   }
 

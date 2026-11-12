@@ -58,10 +58,12 @@
         "Justice, Dept of (DOJ)"
       ],
       "bodyKeywords": [
-        "justice",
+        "department of justice",
+        "dept\\.? of justice",
+        "\\bdoj\\b",
         "solicitor general",
         "attorney general",
-        "\\bdoj\\b"
+        "office of legal counsel"
       ]
     },
     {
@@ -88,14 +90,19 @@
         "Natl Security Council (NSC)"
       ],
       "bodyKeywords": [
-        "white house",
         "executive office of the president",
         "\\beop\\b",
+        "white house office",
         "national economic council",
+        "domestic policy council",
+        "national security council",
         "office of management and budget",
         "\\bomb\\b",
-        "national security council",
-        "president"
+        "council of economic advisers",
+        "office of the vice president",
+        "assistant to the president",
+        "office of public liaison",
+        "white house counsel"
       ]
     },
     {
@@ -112,10 +119,12 @@
         "Justice, Dept of (DOJ)"
       ],
       "bodyKeywords": [
-        "justice",
+        "department of justice",
+        "dept\\.? of justice",
+        "\\bdoj\\b",
         "solicitor general",
         "attorney general",
-        "\\bdoj\\b"
+        "office of legal counsel"
       ]
     },
     {
@@ -201,7 +210,8 @@
       "role": "Filed an amicus brief",
       "fec": {
         "name": "BOOKER",
-        "office": "S"
+        "office": "S",
+        "first": "CORY"
       },
       "links": [
         {

@@ -20,8 +20,8 @@ export const RULE_TEXT: Record<string, { title: string; how: string }> = {
     how: `A quarter's reported lobbying (each series separately) is at least ${RULES.SPEND_ABOVE_PCT}% above the median of the same series over the ${RULES.BASELINE_Q} preceding quarters, and the quarter falls within ${RULES.WINDOW_BEFORE_Q} quarters before or ${RULES.WINDOW_AFTER_Q} after a decision.`,
   },
   issue_named_near_decision: {
-    title: "Case-related lobbying listed the decision-making body",
-    how: `A case-related lobbying activity (glyphosate or pesticide policy) lists, among the government bodies contacted, the body that made the decision, in the decision quarter or the ${RULES.WINDOW_BEFORE_Q} quarters before it. Baseline: how many earlier quarters had the same kind of entry.`,
+    title: "New case-related lobbying text that lists the decision-making body",
+    how: `A registrant files case-related lobbying text (glyphosate or pesticide policy) that it had not used before, listing the body that made the decision among the bodies contacted, in the decision quarter or the ${RULES.WINDOW_BEFORE_Q} quarters before it. Baseline: the company's average number of such new texts per quarter. Repeated, unchanged texts are not flagged because they appear every quarter.`,
   },
   new_outside_firm: {
     title: "New outside lobbying firm before a decision",
@@ -111,15 +111,28 @@ export function spendAboveOwnBaseline(subjectId: string, decisions: DecisionIn[]
 /** Rule 2 */
 export function issueNamedNearDecision(subjectId: string, decisions: DecisionIn[], activities: ActivityIn[], allQuarters: string[]): FlagOut[] {
   const out: FlagOut[] = [];
+  // First quarter each (registrant, text) appears. Texts present in the first quarter of the data are not "new".
+  const firstSeen = new Map<string, string>();
+  for (const a of [...activities].sort((x, y) => x.quarter.localeCompare(y.quarter))) {
+    const k = `${a.registrant}|${a.excerpt.trim().replace(/\s+/g, " ")}`;
+    if (!firstSeen.has(k)) firstSeen.set(k, a.quarter);
+  }
+  const start = allQuarters[0];
+  const isNew = (a: ActivityIn) => {
+    const q = firstSeen.get(`${a.registrant}|${a.excerpt.trim().replace(/\s+/g, " ")}`);
+    return q === a.quarter && q !== start;
+  };
   for (const d of decisionsOnly(decisions)) {
     if (!d.ldaEntities.length) continue;
     const dq = quarterOf(d.date);
     const from = addQuarters(dq, -RULES.WINDOW_BEFORE_Q);
-    const matches = (a: ActivityIn) => isRelevant(a) && a.govEntities.some((g) => d.ldaEntities.includes(g));
+    const matches = (a: ActivityIn) => isRelevant(a) && isNew(a) && a.govEntities.some((g) => d.ldaEntities.includes(g));
     const hits = activities.filter((a) => matches(a) && quarterIndex(a.quarter) >= quarterIndex(from) && quarterIndex(a.quarter) <= quarterIndex(dq));
     if (!hits.length) continue;
-    const earlier = allQuarters.filter((q) => quarterIndex(q) < quarterIndex(from));
-    const earlierWith = new Set(activities.filter((a) => matches(a) && quarterIndex(a.quarter) < quarterIndex(from)).map((a) => a.quarter));
+    const earlierQs = allQuarters.filter((q) => q !== start && quarterIndex(q) < quarterIndex(from));
+    const earlierCount = activities.filter((a) => matches(a) && quarterIndex(a.quarter) < quarterIndex(from)).length;
+    const avg = earlierQs.length ? earlierCount / earlierQs.length : 0;
+    const qn = RULES.WINDOW_BEFORE_Q + 1;
     const bodies = [...new Set(hits.flatMap((a) => a.govEntities.filter((g) => d.ldaEntities.includes(g))))];
     const quarters = [...new Set(hits.map((a) => a.quarter))].sort();
     out.push({
@@ -128,10 +141,10 @@ export function issueNamedNearDecision(subjectId: string, decisions: DecisionIn[
       subjectId,
       decisionIds: [d.id],
       window: `${from} .. ${dq}`,
-      observed: { entries: hits.length, quarters, bodies },
-      baseline: { earlierQuartersWithSameKindOfEntry: earlierWith.size, earlierQuarters: earlier.length },
-      evidence: dedupeEvidence(hits.map((a) => ({ label: `${a.quarter} · ${a.registrant}: "${a.excerpt.slice(0, 120)}${a.excerpt.length > 120 ? "…" : ""}"`, url: a.sourceUrl }))),
-      wording: `${hits.length} case-related lobbying ${hits.length === 1 ? "entry" : "entries"} in ${quarters.join(", ")} listed ${bodies.join(", ")} among the bodies contacted — the body that made "${d.title}" (${d.date}). For comparison, the same kind of entry appeared in ${earlierWith.size} of the ${earlier.length} earlier quarters in this dataset.`,
+      observed: { newTexts: hits.length, quarters, bodies },
+      baseline: { averageNewTextsPerQuarter: Number(avg.toFixed(2)), expectedInWindow: Number((avg * qn).toFixed(2)), earlierQuarters: earlierQs.length },
+      evidence: dedupeEvidence(hits.map((a) => ({ label: `${a.quarter} · ${a.registrant}: "${a.excerpt.slice(0, 160)}${a.excerpt.length > 160 ? "…" : ""}"`, url: a.sourceUrl }))),
+      wording: `${hits.length} new case-related lobbying ${hits.length === 1 ? "text" : "texts"} (first used in ${quarters.join(", ")}) listed ${bodies.join(", ")} among the bodies contacted — offices that correspond to the maker of "${d.title}" (${d.date}). Earlier, the company filed on average ${avg.toFixed(2)} such new texts per quarter (about ${(avg * qn).toFixed(1)} expected in a ${qn}-quarter window).`,
       pendingReview: hits.some((a) => a.pending),
     });
   }
@@ -194,7 +207,7 @@ export function revolvingDoorOverlap(subjectId: string, decisions: DecisionIn[],
       observed: { lobbyists: hits.map((h) => ({ name: h.lobbyist.name, coveredPosition: h.position.text })) },
       baseline: { lobbyistsOnCaseActivityInWindow: ids.size, ofWhichListAnyCoveredPosition: withAny },
       evidence: hits.map((h) => ({ label: `${h.lobbyist.name}: "${h.position.text}"`, url: h.position.sourceUrl })),
-      wording: `${hits.length === 1 ? "A lobbyist" : `${hits.length} lobbyists`} on case-related activity near "${d.title}" (${d.date}) list a prior government role whose text names the decision-making body. Of the ${ids.size} lobbyists on case-related activity in that window, ${withAny} list any prior government role. Former officials may legally lobby; this does not suggest any rule was broken.`,
+      wording: `${hits.length === 1 ? "A lobbyist" : `${hits.length} lobbyists`} on case-related activity near "${d.title}" (${d.date}) ${hits.length === 1 ? "lists" : "list"} a prior government role whose text names the decision-making body. Of the ${ids.size} lobbyists on case-related activity in that window, ${withAny} list any prior government role. Former officials may legally lobby; this does not suggest any rule was broken.`,
       pendingReview: acts.some((a) => a.pending),
     });
   }
@@ -238,16 +251,41 @@ function dedupeEvidence(e: Array<{ label: string; url: string }>) {
   return e.filter((x) => (seen.has(x.label) ? false : (seen.add(x.label), true)));
 }
 
+/** Merge flags of the same rule whose evidence is identical (overlapping decision windows). */
+export function mergeOverlapping(flags: FlagOut[], decisions: DecisionIn[]): FlagOut[] {
+  const byKey = new Map<string, FlagOut[]>();
+  for (const f of flags) {
+    const k = `${f.rule}|${f.evidence.map((e) => e.label + e.url).sort().join("||")}`;
+    byKey.set(k, [...(byKey.get(k) ?? []), f]);
+  }
+  const out: FlagOut[] = [];
+  for (const group of byKey.values()) {
+    if (group.length === 1 || group[0].rule === "spend_above_own_baseline") { out.push(...group); continue; }
+    const ids = [...new Set(group.flatMap((g) => g.decisionIds))];
+    const titles = ids.map((id) => decisions.find((d) => d.id === id)).filter(Boolean).map((d) => `"${d!.title}" (${d!.date})`);
+    const first = group[0];
+    out.push({
+      ...first,
+      id: `${first.rule}:${first.subjectId}:${ids.join("+")}`,
+      decisionIds: ids,
+      window: [...new Set(group.map((g) => g.window))].join("; "),
+      wording: first.wording.replace(/"[^"]+" \(\d{4}-\d{2}-\d{2}\)/, titles.join(", ")),
+      pendingReview: group.some((g) => g.pendingReview),
+    });
+  }
+  return out;
+}
+
 export function runAllRules(input: {
   subjectId: string; decisions: DecisionIn[]; spend: SpendIn[]; activities: ActivityIn[]; firms: FirmIn[]; lobbyists: LobbyistIn[];
   contributions: ContributionIn[]; recipientTotals: RecipientTotalIn[]; allQuarters: string[];
 }): FlagOut[] {
   const { subjectId, decisions } = input;
-  return [
+  return mergeOverlapping([
     ...spendAboveOwnBaseline(subjectId, decisions, input.spend),
     ...issueNamedNearDecision(subjectId, decisions, input.activities, input.allQuarters),
     ...newOutsideFirm(subjectId, decisions, input.firms, input.allQuarters),
     ...revolvingDoorOverlap(subjectId, decisions, input.activities, input.lobbyists),
     ...contributionToDecisionParticipant(subjectId, decisions, input.contributions, input.recipientTotals),
-  ];
+  ], decisions);
 }
