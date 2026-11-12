@@ -1,0 +1,20 @@
+{
+  "name": "money-trail",
+  "version": "1.0.0",
+  "description": "Nonpartisan money & influence tracker. v1: glyphosate case.",
+  "scripts": {
+    "feasibility": "tsx scripts/feasibility/run-all.ts",
+    "feasibility:lda": "tsx scripts/feasibility/lda.ts",
+    "feasibility:fec": "tsx scripts/feasibility/fec.ts",
+    "feasibility:fr": "tsx scripts/feasibility/federal-register.ts",
+    "feasibility:scotus": "tsx scripts/feasibility/scotus.ts",
+    "typecheck": "tsc -p ."
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  },
+  "private": true,
+  "type": "module"
+}
