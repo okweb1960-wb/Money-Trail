@@ -11,7 +11,7 @@ import { PrismaClient } from "../src/generated/prisma/client";
 import { PrismaLibSql } from "@prisma/adapter-libsql";
 import { readRaw } from "./lib/raw";
 import { loadCase } from "./lib/case";
-import { loadAliasDecisions, loadActivityDecisions, activityKey } from "./lib/review";
+import { loadAliasDecisions, loadActivityDecisions, loadOverlapDecisions, activityKey } from "./lib/review";
 import { classifyActivity, isCaseRelevant } from "../src/lib/relevance";
 import { ldaQuarter, quarterOf, quarterIndex, quarterStart, quarterEnd } from "../src/lib/quarters";
 
@@ -99,6 +99,7 @@ async function main() {
   const lda = readRaw<any[]>("lda/filings.json");
   const aliasDec = loadAliasDecisions();
   const actDec = loadActivityDecisions();
+  const overlapDec = loadOverlapDecisions();
   if (!aliasDec.size) throw new Error("data/review/lda-client-aliases.csv missing — run `npm run review:generate` first.");
 
   const companyId = c.company.id;
@@ -199,7 +200,8 @@ async function main() {
       await prisma.edge.create({ data: { id: `edge:employed_by:${lid}:${fid}`, type: "employed_by", fromId: lid, toId: fid, note: fid === companyId ? "in-house lobbyist" : "listed by this registrant", sourceUrl: anyPos?.url ?? firms.get(fid)?.latestUrl ?? "https://lda.gov/", retrievedAt: d(lda.retrieved_at) } });
     }
     for (const [text, p] of e.positions) {
-      await prisma.coveredPosition.create({ data: { lobbyistId: lid, text, firstQuarter: p.first, lastQuarter: p.last, sourceUrl: p.url, retrievedAt: d(p.retrieved) } });
+      const ov = overlapDec.get(`${lid.split(":")[1]}|${text}`);
+      await prisma.coveredPosition.create({ data: { lobbyistId: lid, text, firstQuarter: p.first, lastQuarter: p.last, overlap: ov?.note ?? null, overlapReview: ov?.review ?? "proposed", sourceUrl: p.url, retrievedAt: d(p.retrieved) } });
     }
   }
   await prisma.dataRun.create({ data: { id: "lda", source: "Senate LDA (lda.gov)", ranAt: d(lda.retrieved_at), notes: `${nFilings} LD-2 filings, ${nActs} activities, ${firms.size} outside firms, ${tiedLobbyists.size} lobbyists tied to a decision window` } });

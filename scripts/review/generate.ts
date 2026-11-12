@@ -4,9 +4,12 @@
 //  lda-client-aliases.csv  — which LDA client names count as the case company
 //  lda-activities.csv      — whether each distinct lobbying-activity text is about the case
 //
+//  revolving-door.csv      — whether a lobbyist's prior government role overlaps with the client's industry
+//
 // How to review: open in Excel, fill the "approved" column, save as CSV, run `npm run data`.
 //   aliases:     yes | no
 //   activities:  glyphosate_direct | pesticide_policy | general
+//   revolving:   approved_overlap = your note (or "none")
 // Blank = not reviewed yet (the app shows the machine proposal with a "pending review" badge).
 import { join } from "node:path";
 import { readRaw } from "../lib/raw";
@@ -74,6 +77,28 @@ function main() {
   writeCsv(join(DIR, "lda-activities.csv"), actRows, ["key", "registrant", "issue_code", "proposed", "matched", "n_quarters", "quarters_seen", "text", "example_url", "approved"]);
   const by = (r: string) => actRows.filter((x) => x.proposed === r).length;
   console.log(`  lda-activities.csv: ${actRows.length} distinct texts (direct ${by("glyphosate_direct")}, pesticide ${by("pesticide_policy")}, general ${by("general")})`);
+
+  // 3) Covered positions of lobbyists on case-related activity: industry-overlap tag
+  const prevC = new Map(readCsvIfExists(join(DIR, "revolving-door.csv")).map((r) => [r.key, r]));
+  const OVERLAP = /\b(agricultur\w*|usda|epa|environmental protection agency|pesticides?|farm\w*|food|rural|interior|natural resources|energy and commerce)\b/i;
+  const cpRows = new Map<string, any>();
+  for (const f of filings) {
+    if (!COMPANY_NAME.test(f.client.name)) continue;
+    for (const a of f.lobbying_activities ?? []) {
+      if (classifyActivity(a.description).relevance === "general") continue;
+      for (const l of a.lobbyists ?? []) {
+        const cp = (l.covered_position ?? "").trim();
+        if (!cp) continue;
+        const name = `${l.lobbyist.first_name} ${l.lobbyist.last_name}`.replace(/\s+/g, " ").trim();
+        const key = `${l.lobbyist.id}|${cp}`;
+        if (cpRows.has(key)) continue;
+        const m = cp.match(OVERLAP);
+        cpRows.set(key, { key, lobbyist: name, covered_position: cp, proposed_overlap: m ? `Mentions "${m[0]}" — related to the client's agriculture/pesticide business` : "", example_url: f.filing_document_url, approved_overlap: prevC.get(key)?.approved_overlap ?? "" });
+      }
+    }
+  }
+  writeCsv(join(DIR, "revolving-door.csv"), [...cpRows.values()].sort((a, b) => a.lobbyist.localeCompare(b.lobbyist)), ["key", "lobbyist", "covered_position", "proposed_overlap", "example_url", "approved_overlap"]);
+  console.log(`  revolving-door.csv: ${cpRows.size} covered positions (${[...cpRows.values()].filter((r) => r.proposed_overlap).length} with a proposed overlap note)`);
 }
 
 main();

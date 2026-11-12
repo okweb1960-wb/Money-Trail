@@ -36,3 +36,15 @@ export function loadActivityDecisions() {
   }
   return out;
 }
+
+/** Revolving-door overlap notes: "<lda lobbyist id>|<covered position>" -> { note, review } */
+export function loadOverlapDecisions() {
+  const rows = readCsvIfExists(join(DIR, "revolving-door.csv"));
+  const out = new Map<string, { note: string | null; review: Review }>();
+  for (const r of rows) {
+    const a = (r.approved_overlap ?? "").trim();
+    if (a) out.set(r.key, { note: a.toLowerCase() === "none" ? null : a, review: "approved" });
+    else out.set(r.key, { note: r.proposed_overlap || null, review: "proposed" });
+  }
+  return out;
+}

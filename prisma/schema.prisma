@@ -175,6 +175,8 @@ model CoveredPosition {
   text        String
   firstQuarter String
   lastQuarter String
+  overlap     String? // reviewer's note on overlap with the client's industry (data/review/revolving-door.csv)
+  overlapReview ReviewStatus @default(proposed)
   sourceUrl   String
   retrievedAt DateTime
 

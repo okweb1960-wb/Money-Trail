@@ -79,7 +79,7 @@ async function main() {
       .filter((t: any) => t.cycle >= WINDOW.fromYear)
       .map((t: any) => ({ cycle: t.cycle, receipts: t.receipts, disbursements: t.disbursements, contributions_to_other_committees: t.contributions_to_other_committees ?? t.fed_candidate_committee_contributions ?? null }));
 
-    let disb: any[] = [];
+    const disb: any[] = [];
     let timeouts = 0;
     for (const cycle of activeCycles) {
       let last: Record<string, string> = {};
@@ -87,7 +87,7 @@ async function main() {
         let r;
         try {
           r = await fetchJson<any>(`${BASE}/schedules/schedule_b/?${qs({ committee_id: pac.committee_id, two_year_transaction_period: cycle, per_page: 100, ...last })}`, OPTS);
-        } catch (e) {
+        } catch {
           timeouts++;
           break;
         }
