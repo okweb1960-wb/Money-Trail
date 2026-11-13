@@ -5,7 +5,7 @@ import type { Core, ElementDefinition, LayoutOptions, NodeSingular, StylesheetJs
 import { KINDS } from "@/lib/graph-kinds";
 
 export interface NodeIn { id: string; kind: string; label: string; subtitle: string | null; pending: boolean; sources: Array<{ label: string; url: string; retrievedAt: string }> }
-export interface EdgeIn { id: string; type: string; source: string; target: string; amount: number | null; date: string | null; note: string | null; sourceUrl: string; retrievedAt: string }
+export interface EdgeIn { id: string; type: string; source: string; target: string; amount: number | null; date: string | null; note: string | null; side: string | null; sidePhrase: string | null; sourceUrl: string; retrievedAt: string }
 
 const EDGE_LABEL: Record<string, string> = {
   lobbied_for: "Lobbied for (LD-2)",
@@ -53,7 +53,7 @@ export function NetworkGraph({ nodes, edges }: { nodes: NodeIn[]; edges: EdgeIn[
       const used = new Set(visibleEdges.flatMap((e) => [e.source, e.target]));
       const els: ElementDefinition[] = [
         ...nodes.filter((n) => used.has(n.id) || n.kind === "company").map((n) => ({ data: { id: n.id, label: n.label.length > 34 ? n.label.slice(0, 32) + "…" : n.label, kind: n.kind, deg: degree.get(n.id) ?? 0 } })),
-        ...visibleEdges.map((e) => ({ data: { id: e.id, source: e.source, target: e.target, type: e.type } })),
+        ...visibleEdges.map((e) => ({ data: { id: e.id, source: e.source, target: e.target, type: e.type, side: e.side ?? "" } })),
       ];
       const ink = cssVar("--ink-2");
       const surface = cssVar("--surface");
@@ -64,6 +64,10 @@ export function NetworkGraph({ nodes, edges }: { nodes: NodeIn[]; edges: EdgeIn[
         { selector: 'node[kind = "company"], node[kind = "decision"], node[kind = "official"], node[kind = "committee"]', style: { "min-zoomed-font-size": 0, "font-weight": "bold" } },
         { selector: "edge", style: { width: 1, "line-color": lineColor, "curve-style": "straight", "target-arrow-shape": "triangle", "target-arrow-color": lineColor, "arrow-scale": 0.6, opacity: 0.8 } },
         { selector: "edge[type = 'contributed_to']", style: { width: 2 } },
+        // Amicus side: line style only (no color), so neither side is visually favored.
+        { selector: "edge[side = 'petitioner']", style: { "line-style": "solid", width: 1.5 } },
+        { selector: "edge[side = 'respondent']", style: { "line-style": "dashed", "line-dash-pattern": [6, 3], width: 1.5 } },
+        { selector: "edge[side = 'not_stated']", style: { "line-style": "dotted", width: 1.5 } },
         { selector: ".faded", style: { opacity: 0.12 } },
         { selector: "node:selected", style: { "border-color": cssVar("--ink"), "border-width": 3 } },
       ];
@@ -118,6 +122,8 @@ export function NetworkGraph({ nodes, edges }: { nodes: NodeIn[]; edges: EdgeIn[
           </span>
         ))}
         <span className="text-muted">Size = number of connections</span>
+        <span className="inline-flex items-center gap-1.5"><svg width="22" height="6" aria-hidden><line x1="0" y1="3" x2="22" y2="3" stroke="var(--ink-2)" strokeWidth="1.5" /></svg>Brief supporting petitioner</span>
+        <span className="inline-flex items-center gap-1.5"><svg width="22" height="6" aria-hidden><line x1="0" y1="3" x2="22" y2="3" stroke="var(--ink-2)" strokeWidth="1.5" strokeDasharray="6 3" /></svg>Brief supporting respondent</span>
       </div>
       <fieldset className="mt-2 flex flex-wrap gap-3 text-xs">
         <legend className="sr-only">Show connection types</legend>
@@ -147,6 +153,7 @@ export function NetworkGraph({ nodes, edges }: { nodes: NodeIn[]; edges: EdgeIn[
                 {nodeEdges.map((e) => (
                   <li key={e.id}>
                     {EDGE_LABEL[e.type] ?? e.type}: {e.source === node.id ? nameOf(e.target) : nameOf(e.source)}
+                    {e.side && <span className="text-ink-2"> — {e.side === "petitioner" ? "supporting petitioner" : e.side === "respondent" ? "supporting respondent" : e.side === "neither" ? "supporting neither party" : "no side on cover"}{e.sidePhrase ? ` (cover: “${e.sidePhrase}”)` : ""}</span>}
                     <span className="text-muted">{usd(e.amount)}{e.date ? ` · ${e.date.slice(0, 10)}` : ""}</span>{" "}
                     <a href={e.sourceUrl} target="_blank" rel="noopener noreferrer">↗</a>
                   </li>

@@ -35,10 +35,10 @@ export default async function NetworkPage() {
             </tbody>
           </table>
           <table className="w-full text-left text-xs">
-            <thead className="text-ink-2"><tr><th className="py-1">From</th><th>Connection</th><th>To</th><th>Source</th></tr></thead>
+            <thead className="text-ink-2"><tr><th className="py-1">From</th><th>Connection</th><th>To</th><th>Side (briefs)</th><th>Source</th></tr></thead>
             <tbody>
               {edges.map((e) => (
-                <tr key={e.id} className="border-t border-line"><td className="py-1 pr-2">{name.get(e.source)}</td><td className="pr-2">{e.type.replace(/_/g, " ")}</td><td className="pr-2">{name.get(e.target)}</td><td><a href={e.sourceUrl} target="_blank" rel="noopener noreferrer">↗</a></td></tr>
+                <tr key={e.id} className="border-t border-line"><td className="py-1 pr-2">{name.get(e.source)}</td><td className="pr-2">{e.type.replace(/_/g, " ")}</td><td className="pr-2">{name.get(e.target)}</td><td className="pr-2">{e.side ? e.side.replace("_", " ") : ""}</td><td><a href={e.sourceUrl} target="_blank" rel="noopener noreferrer">↗</a></td></tr>
               ))}
             </tbody>
           </table>

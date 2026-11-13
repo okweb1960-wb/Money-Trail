@@ -90,3 +90,11 @@ All flags are worded "worth a closer look" and show their baseline and evidence 
 1. EO 14387 full text (blocked here) — run `npm run fetch:fr` locally, then the claim about "liability protection" in the order can be checked.
 2. Claim wording has not been checked against the audio; a person should spot-check the 7 timestamps.
 3. You may want to re-check the delegated review decisions (each has a reason in `review_note`).
+
+## Update 2026-11-13 (b): which side each amicus brief supports
+
+- New script `npm run fetch:amicus` reads the cover page of every amicus brief on the docket (35 briefs) and records the side stated there, with the exact phrase (e.g. "IN SUPPORT OF PETITIONER", or "IN SUPPORT OF MONSANTO COMPANY"). The same rule applies to every filer: organizations, states, officials and the United States. If a cover states no side, nothing is guessed. Unit tests cover the cover-phrase matcher.
+- Result (merits stage, 30 briefs): **12 supporting Monsanto Company (petitioner)** — the United States, Nebraska et al. (15 states), Missouri State Senator Jason Bean et al., and 9 organizations (e.g. CropLife America, U.S. Chamber of Commerce, American Tort Reform Association, Farm Bureau groups, agricultural retailers); **18 supporting John L. Durnell (respondent)** — New Mexico et al. and Texas et al. (Texas, Florida, Ohio), 36 State Legislators, U.S. Senator Cory Booker, 11 organizations (e.g. Public Citizen, Center for Food Safety, Farmworker Justice, American Association for Justice, Veterans of Foreign Wars, Local Government Legal Center) and 3 briefs by individuals (counted, not named).
+- Petition stage (5 briefs): 4 organizations supporting Monsanto (Atlantic Legal Foundation, CropLife America, American Farm Bureau Federation, U.S. Chamber); the U.S. brief states no side on its cover but concludes the petition "should be granted".
+- Shown on the case page ("Who filed briefs… and on which side"), in the network (line style: solid = supporting petitioner, dashed = supporting respondent; no color difference) and in the network table.
+- Spot-checked by eye: Nebraska, Texas, Local Government Legal Center, Farm Bureau Organizations, American Tort Reform Association covers.

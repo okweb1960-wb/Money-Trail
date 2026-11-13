@@ -21,6 +21,11 @@ const DOCKET_HTML = `https://www.supremecourt.gov/search.aspx?filename=/docket/d
 const strip = (s: string) => s.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
 const d = (s: string) => new Date(s);
 const warn: string[] = [];
+// Party names as the docket states them ("Monsanto Company, Petitioner" -> "Monsanto Company").
+const docketTitles = readRaw<any>("scotus/docket.json").data;
+const PETITIONER = String(docketTitles.PetitionerTitle ?? "petitioner").replace(/,\s*Petitioners?$/i, "").trim();
+const RESPONDENT = String(docketTitles.RespondentTitle ?? "respondent").replace(/,\s*Respondents?$/i, "").trim();
+const SIDE_LABEL: Record<string, string> = { petitioner: `supporting ${PETITIONER} (petitioner)`, respondent: `supporting ${RESPONDENT} (respondent)`, neither: "supporting neither party", not_stated: "no side stated on the cover" };
 
 function docketDate(s: string): Date {
   const t = new Date(`${s} 12:00 UTC`);
@@ -30,6 +35,8 @@ function docketDate(s: string): Date {
 
 async function wipe() {
   await prisma.patternFlag.deleteMany();
+  await prisma.amicusBrief.deleteMany();
+  await prisma.caseInfo.deleteMany();
   await prisma.activity.deleteMany();
   await prisma.edge.deleteMany();
   await prisma.alias.deleteMany();
@@ -92,6 +99,7 @@ async function loadDecisions() {
 async function main() {
   await wipe();
   const { decisions, docketEntries, docketRetrieved } = await loadDecisions();
+  await prisma.caseInfo.create({ data: { slug: c.slug, docket: c.scotus.docket, petitioner: PETITIONER, respondent: RESPONDENT, sourceUrl: DOCKET_HTML, retrievedAt: d(docketRetrieved) } });
   const decisionQuarters = [...c.decisions.filter((x) => x.tier === "decision")].map((x) => decisions.get(x.key)).filter(Boolean).map((x) => quarterOf(x!.date));
   const nearDecision = (q: string) => decisionQuarters.some((dq) => Math.abs(quarterIndex(q) - quarterIndex(dq)) <= 2);
 
@@ -206,6 +214,15 @@ async function main() {
   }
   await prisma.dataRun.create({ data: { id: "lda", source: "Senate LDA (lda.gov)", ranAt: d(lda.retrieved_at), notes: `${nFilings} LD-2 filings, ${nActs} activities, ${firms.size} outside firms, ${tiedLobbyists.size} lobbyists tied to a decision window` } });
 
+  // Sides stated on amicus brief covers (data/raw/scotus/amicus-briefs.json, from npm run fetch:amicus)
+  let amicusSides: Array<{ filer: string; url: string; side: string; coverPhrase: string | null; docketDate: string; retrieved_at: string }> = [];
+  try {
+    amicusSides = readRaw<any[]>("scotus/amicus-briefs.json").data;
+  } catch {
+    warn.push("data/raw/scotus/amicus-briefs.json missing — run npm run fetch:amicus; amicus sides not shown");
+  }
+  const sideByUrl = new Map(amicusSides.map((x) => [x.url, x]));
+
   // ---------- Officials ----------
   const officialDecision = new Map<string, string>();
   for (const o of c.officials) {
@@ -223,7 +240,8 @@ async function main() {
     await prisma.entity.create({ data: { id: o.id, kind: "official", name: o.name, subtitle: o.role, review: "approved", sourceUrl: src ?? firstDec!.sourceUrl, retrievedAt: d(docketRetrieved) } });
     for (const l of linkDecisions) {
       const dec = await prisma.decision.findUnique({ where: { id: l.dec!.id } });
-      await prisma.edge.create({ data: { id: `edge:${l.type}:${o.id}:${l.dec!.id}`, type: l.type, fromId: o.id, toId: null, decisionId: l.dec!.id, date: filedDate ?? dec!.date, note: o.role, sourceUrl: src ?? dec!.sourceUrl, retrievedAt: d(docketRetrieved) } });
+      const sd = src ? sideByUrl.get(src) : undefined;
+      await prisma.edge.create({ data: { id: `edge:${l.type}:${o.id}:${l.dec!.id}`, type: l.type, fromId: o.id, toId: null, decisionId: l.dec!.id, date: filedDate ?? dec!.date, note: o.role, side: sd?.side ?? null, sidePhrase: sd?.coverPhrase ?? null, sourceUrl: src ?? dec!.sourceUrl, retrievedAt: d(docketRetrieved) } });
       officialDecision.set(o.id, l.dec!.id);
     }
   }
@@ -248,13 +266,43 @@ async function main() {
     }
     for (const [name, briefs] of orgs) {
       const id = `org:${name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`;
-      await prisma.entity.create({ data: { id, kind: "organization", name, subtitle: `Filed ${briefs.length} amicus brief${briefs.length > 1 ? "s" : ""}. The docket entry does not say which side it supported.`, review: "approved", sourceUrl: briefs[0].url, retrievedAt: d(docketRetrieved) } });
+      const sides = [...new Set(briefs.map((b) => sideByUrl.get(b.url)?.side ?? "not_stated"))];
+      const sideText = sides.map((s) => SIDE_LABEL[s] ?? s).join("; ");
+      await prisma.entity.create({ data: { id, kind: "organization", name, subtitle: `Filed ${briefs.length} amicus brief${briefs.length > 1 ? "s" : ""} — ${sideText} (as stated on the brief cover).`, review: "approved", sourceUrl: briefs[0].url, retrievedAt: d(docketRetrieved) } });
       for (const [i, b] of briefs.entries()) {
         const dec = decisions.get(b.key);
         if (!dec) continue;
-        await prisma.edge.create({ data: { id: `edge:filed_in:${id}:${i}`, type: "filed_in", fromId: id, toId: null, decisionId: dec.id, date: b.date, note: `Amicus brief filed ${b.date.toISOString().slice(0, 10)}`, sourceUrl: b.url, retrievedAt: d(docketRetrieved) } });
+        const sd = sideByUrl.get(b.url);
+        await prisma.edge.create({ data: { id: `edge:filed_in:${id}:${i}`, type: "filed_in", fromId: id, toId: null, decisionId: dec.id, date: b.date, note: `Amicus brief filed ${b.date.toISOString().slice(0, 10)}`, side: sd?.side ?? "not_stated", sidePhrase: sd?.coverPhrase ?? null, sourceUrl: b.url, retrievedAt: d(docketRetrieved) } });
       }
       nOrgs++;
+    }
+  }
+
+  // ---------- Every amicus brief (for the "who filed, which side" table) ----------
+  {
+    const grantDate = decisions.get(c.amicus?.petitionStageDecision ?? "cert_granted")?.date;
+    const officialRes = c.officials.filter((o) => o.docketMatch).map((o) => ({ id: o.id, re: new RegExp(o.docketMatch!, "i") }));
+    const allEntities = await prisma.entity.findMany({ where: { kind: "organization" }, select: { id: true, name: true } });
+    for (const [i, x] of amicusSides.entries()) {
+      const filedOn = docketDate(x.docketDate);
+      const off = officialRes.find((o) => o.re.test(`Brief amic${/amici/i.test(x.filer) ? "i" : "us"} curiae of ${x.filer} filed`) || o.re.test(`Brief amicus curiae of ${x.filer} filed`) || o.re.test(`Brief amici curiae of ${x.filer} filed`));
+      const isUS = /^(the )?United States$/i.test(x.filer);
+      const isIndividuals = (c.amicus?.exclude ?? []).some((e) => !/United States/.test(e.pattern) && new RegExp(e.pattern, "i").test(x.filer));
+      const org = allEntities.find((e) => e.name === x.filer);
+      const filerKind = isUS ? "united_states" : off ? (/state senator|legislator|senator/i.test(x.filer) ? "official" : "government") : isIndividuals ? "individuals" : "organization";
+      await prisma.amicusBrief.create({ data: {
+        id: `amicus:${i}`, caseSlug: c.slug,
+        filer: isIndividuals ? "Individuals (not named on this site)" : x.filer,
+        filerKind, entityId: isUS ? "official:us-sg" : off?.id ?? org?.id ?? null,
+        stage: grantDate && filedOn < grantDate ? "petition" : "merits", filedOn, side: x.side, sidePhrase: x.coverPhrase,
+        sourceUrl: x.url, retrievedAt: d(x.retrieved_at),
+      } });
+      // SG edges: attach the side of the matching U.S. brief
+      if (isUS) {
+        const e = await prisma.edge.findFirst({ where: { fromId: "official:us-sg", sourceUrl: x.url } });
+        if (e) await prisma.edge.update({ where: { id: e.id }, data: { side: x.side, sidePhrase: x.coverPhrase } });
+      }
     }
   }
 

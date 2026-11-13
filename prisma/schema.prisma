@@ -165,6 +165,8 @@ model Edge {
   amount       Float?
   date         DateTime?
   note         String?
+  side         String? // amicus briefs: petitioner | respondent | neither | not_stated (from the brief's cover)
+  sidePhrase   String? // exact cover wording, e.g. "IN SUPPORT OF PETITIONER"
   sourceUrl    String
   retrievedAt  DateTime
   verification Verification @default(verified)
@@ -214,6 +216,31 @@ model PatternFlag {
   wording    String
   pendingReview Boolean @default(false)
   computedAt DateTime
+}
+
+// Every amicus brief on the docket with the side stated on its cover (including filers not shown as nodes).
+model AmicusBrief {
+  id          String   @id
+  caseSlug    String
+  filer       String
+  filerKind   String // organization | official | government | individuals | united_states
+  entityId    String?
+  stage       String // petition | merits
+  filedOn     DateTime
+  side        String
+  sidePhrase  String?
+  sourceUrl   String
+  retrievedAt DateTime
+}
+
+// Case-level facts read from the docket (party names as the Court lists them).
+model CaseInfo {
+  slug        String   @id
+  docket      String
+  petitioner  String
+  respondent  String
+  sourceUrl   String
+  retrievedAt DateTime
 }
 
 model DataRun {

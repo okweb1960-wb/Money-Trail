@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getCaseActivities, getDecisions, getFlags, getLobbyingFilings, getReviewStatus, getTimeline, RULES } from "@/lib/data";
+import { getAmicusBriefs, getCaseActivities, getDecisions, getFlags, getLobbyingFilings, getReviewStatus, getTimeline, RULES } from "@/lib/data";
+import { AmicusSides } from "@/components/AmicusSides";
 import { Timeline } from "@/components/Timeline";
 import { ViewOnly, ViewProvider, ViewToggle } from "@/components/ViewToggle";
 import { FlagCard } from "@/components/FlagCard";
@@ -12,7 +13,7 @@ export const metadata: Metadata = { title: "Glyphosate case" };
 const fmtDate = (s: string) => new Date(`${s}T12:00:00Z`).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric", timeZone: "UTC" });
 
 export default async function GlyphosateCase() {
-  const [decisions, timeline, flags, filings, activities, review] = await Promise.all([getDecisions(), getTimeline(), getFlags(), getLobbyingFilings(), getCaseActivities(), getReviewStatus()]);
+  const [decisions, timeline, flags, filings, activities, review, amicus] = await Promise.all([getDecisions(), getTimeline(), getFlags(), getLobbyingFilings(), getCaseActivities(), getReviewStatus(), getAmicusBriefs()]);
   const majors = decisions.filter((d) => d.tier === "decision");
   const grant = decisions.find((d) => d.id.endsWith(":cert_granted"));
   const opinion = decisions.find((d) => d.id.endsWith(":opinion"));
@@ -112,6 +113,10 @@ export default async function GlyphosateCase() {
           </div>
         </section>
       </ViewOnly>
+
+      <section className="mt-10" aria-label="Amicus briefs by side">
+        <AmicusSides rows={amicus.rows} petitioner={amicus.petitioner} respondent={amicus.respondent} />
+      </section>
 
       <section className="mt-10" aria-labelledby="flags">
         <h2 id="flags" className="text-xl font-semibold">Pattern flags</h2>
