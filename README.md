@@ -38,7 +38,7 @@ Keys live only in `.env.local` (git-ignored). The FEC key is sent in a header, n
 
 ## Human review (required before publishing)
 
-Screening rules only *propose* labels. A person confirms them in three CSV files (open in Excel, fill the last column, save as CSV, then `npm run data`):
+Screening rules only *propose* labels. A person confirms them in three CSV files (open in Excel, fill the `approved` column — `approved_overlap` for the revolving-door file — and optionally `reviewed_by` / `review_note`, save as CSV, then `npm run data`):
 
 | File | Decide | Values |
 |---|---|---|
