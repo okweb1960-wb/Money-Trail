@@ -112,7 +112,7 @@ export async function getNetwork(): Promise<{ nodes: GraphNode[]; edges: GraphEd
   const [entities, edges, decisions, cps] = await Promise.all([
     prisma.entity.findMany(),
     prisma.edge.findMany(),
-    prisma.decision.findMany({ where: { caseSlug: CASE_SLUG, tier: "decision" }, orderBy: { date: "asc" } }),
+    prisma.decision.findMany({ where: { caseSlug: CASE_SLUG }, orderBy: { date: "asc" } }),
     prisma.coveredPosition.findMany(),
   ]);
   const nodes: GraphNode[] = entities.map((e) => ({
@@ -122,8 +122,11 @@ export async function getNetwork(): Promise<{ nodes: GraphNode[]; edges: GraphEd
       ...cps.filter((p) => p.lobbyistId === e.id).map((p) => ({ label: `Covered position: "${p.text}" (${p.firstQuarter}–${p.lastQuarter})`, url: p.sourceUrl, retrievedAt: p.retrievedAt.toISOString() })),
     ],
   }));
-  for (const d of decisions) nodes.push({ id: d.id, kind: "decision", label: `${d.title} (${day(d.date)})`, subtitle: d.decidedBy, pending: false, sources: [{ label: d.identifier, url: d.sourceUrl, retrievedAt: d.retrievedAt.toISOString() }] });
-  const decisionIds = new Set(decisions.map((d) => d.id));
+  // Decisions always appear; case events appear only when something links to them (e.g. petition-stage amicus briefs -> cert grant).
+  const linked = new Set(edges.map((e) => e.decisionId).filter(Boolean));
+  const shown = decisions.filter((d) => d.tier === "decision" || linked.has(d.id));
+  for (const d of shown) nodes.push({ id: d.id, kind: "decision", label: `${d.title} (${day(d.date)})${d.tier === "event" ? " — case event" : ""}`, subtitle: d.decidedBy, pending: false, sources: [{ label: d.identifier, url: d.sourceUrl, retrievedAt: d.retrievedAt.toISOString() }] });
+  const decisionIds = new Set(shown.map((d) => d.id));
   const out: GraphEdge[] = [];
   // Aggregate PAC -> official contributions into one edge per pair (each source is still listed on the node).
   for (const e of edges) {

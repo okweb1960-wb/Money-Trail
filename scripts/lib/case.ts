@@ -34,6 +34,7 @@ export interface CaseCfg {
   federal_register: { search_term: string; type: string; subtype: string };
   decisions: CaseDecisionCfg[];
   officials: CaseOfficialCfg[];
+  amicus?: { exclude: Array<{ pattern: string; reason: string }>; petitionStageDecision: string; meritsStageDecision: string };
 }
 
 export function loadCase(slug = "glyphosate"): CaseCfg {

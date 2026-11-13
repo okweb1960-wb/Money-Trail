@@ -8,8 +8,8 @@ Built on 2026-11-12. Data retrieved the same day (see `/sources` in the app and 
 |---|---|---|
 | Case page: timeline, pattern flags, Citizen / Investigator toggle, filings table + CSV export, "where to dig" | `/cases/glyphosate` | Done |
 | Network graph (company, firms, lobbyists, PACs, officials, decisions; color + shape by type, size by connections; click for sources; table view) | `/cases/glyphosate/network` | Done |
-| Revolving door (covered positions verbatim, overlap note, legality note) | `/cases/glyphosate/revolving-door` | Done, overlap notes pending review |
-| Claims panel (CLAIM vs RECORD comparison) | `/cases/glyphosate/claims` | Built; **empty until a transcript source is approved** |
+| Revolving door (covered positions verbatim, overlap note, legality note with U.S. Code citations) | `/cases/glyphosate/revolving-door` | Done |
+| Claims panel (CLAIM vs RECORD comparison) | `/cases/glyphosate/claims` | Done — 7 claims (see "Update 2026-11-13") |
 | Footer on every page; methodology; nonpartisan statement; data sources | all pages, `/methodology`, `/sources` | Done |
 
 Pipeline: `fetch` (public APIs → `data/raw/`) → `review:generate` (human-review CSVs) → `db:load` (SQLite) → `flags` (rule engine).
@@ -60,3 +60,33 @@ All flags are worded "worth a closer look" and show their baseline and evidence 
 2. **Non-official amici** (e.g. CropLife America, U.S. Chamber of Commerce, Public Citizen, Farmworker Justice): add them to the network as "organization" nodes? This would be a new feature.
 3. **Statute citation** for the revolving-door legality note: OK to add an official source (e.g. the U.S. Code on uscode.house.gov)? That is a new source.
 4. Review the three CSVs above, or tell me to make a first pass and mark my decisions as yours to confirm.
+
+---
+
+## Update 2026-11-13 (owner approved: claims source, delegated review, organizations, U.S. Code)
+
+### Claims (7, all shown as CLAIM)
+- Source: the Singju Post transcript (wording) + the episode on YouTube (timestamp links). Podcast Rex (Cloudflare challenge) and YouTube (Google bot check) could not be opened from the build environment; neither block was circumvented. Every quote was checked to appear word for word in the transcript; none could be checked against the audio.
+- Each claim lists what the record shows and does not show. All 7 are "partly supported". Notable record findings:
+  - The U.S. brief urging the Court to take the case (2025-12-01) does **not** list Sarah Harris as a signer; she is listed on the later merits brief and argued the case.
+  - The executive order (2026-02-18) came **33 days after** the Court agreed to hear the case (2026-01-16), not while it was still deciding.
+  - The Court's opinion lists EPA reviews of glyphosate in 2017, 2019 and 2020 (the 2020 interim decision was vacated in 2022), which does not support "hasn't reviewed glyphosate in close to 30 years".
+  - Ballard Partners reported $660,000 from Bayer U.S. LLC (2024-Q4 to 2026-Q3) for "crop protection tools"; nothing in the record links it to the Court's decision.
+- Left out on purpose: allegations about private individuals (e.g. family members, a former staffer now in a private role) and allegations of crimes the loaded records cannot address (e.g. bribery, ghostwriting).
+
+### Review (done by Claude on the owner's instruction; recorded in `reviewed_by` / `review_note`)
+- Client names: all 21 confirmed.
+- Activity texts (211): 26 glyphosate, 162 pesticide policy, 23 general. Changes from the machine proposal: 9 trade entries about other countries' chemical rules → general; 3 "H.R. 4288, Labeling Uniformity Act" entries → pesticide policy (the same filings describe H.R. 4288 as the Agricultural Labeling Uniformity Act).
+- Covered positions (38): 12 overlap notes, written only from the filed role text (two abbreviations the screening missed were added; roles not stated in the filing were not inferred).
+- Effect on flags: still 9; the "new case-related text" baseline moved from 1.48 to 1.24 new texts per quarter; no flags are pending review.
+
+### Organizations that filed amicus briefs
+- 21 organization nodes from the docket (e.g. CropLife America, U.S. Chamber of Commerce, American Farm Bureau Federation, Public Citizen, Farmworker Justice, Center for Food Safety). Excluded: filers named as individual people, the United States, and officials (already shown). The docket does not state which side each supported, so the app does not either. Petition-stage briefs link to the cert grant; merits-stage briefs link to the opinion.
+
+### U.S. Code
+- Revolving-door legality note now cites 2 U.S.C. § 1603(b)(6) (disclosure of covered positions held in the prior 20 years) and 18 U.S.C. § 207 (a), (c), (d), (e) (post-employment restrictions), checked against the text on uscode.house.gov.
+
+### Still open
+1. EO 14387 full text (blocked here) — run `npm run fetch:fr` locally, then the claim about "liability protection" in the order can be checked.
+2. Claim wording has not been checked against the audio; a person should spot-check the 7 timestamps.
+3. You may want to re-check the delegated review decisions (each has a reason in `review_note`).

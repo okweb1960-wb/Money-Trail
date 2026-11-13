@@ -8,6 +8,8 @@ const SOURCES = [
   { name: "OpenFEC API (Federal Election Commission)", url: "https://api.open.fec.gov/developers/", note: "Committee records, name history and itemized disbursements." },
   { name: "Federal Register API", url: "https://www.federalregister.gov/developers/documentation/api/v1", note: "Executive order metadata." },
   { name: "Supreme Court of the United States — docket 24-1068", url: "https://www.supremecourt.gov/search.aspx?filename=/docket/docketfiles/html/public/24-1068.html", note: "Docket entries, briefs and the opinion." },
+  { name: "United States Code (Office of the Law Revision Counsel)", url: "https://uscode.house.gov/", note: "2 U.S.C. § 1603 and 18 U.S.C. § 207, cited on the revolving-door page." },
+  { name: "The Joe Rogan Experience #2578 — transcript (The Singju Post) and episode video (YouTube)", url: "https://singjupost.com/transcript-calley-means-interview-on-joe-rogan-experience-2578/", note: "Source of CLAIM wording only. Third-party transcript; timestamps link to the episode." },
   { name: "U.S. Department of Justice, Office of the Solicitor General", url: "https://www.justice.gov/osg/brief/monsanto-co-v-durnell", note: "The government's own copy of its merits-stage brief." },
 ];
 

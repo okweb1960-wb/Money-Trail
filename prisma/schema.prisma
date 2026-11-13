@@ -17,6 +17,7 @@ enum EntityKind {
   lobbyist
   official
   committee
+  organization // non-government groups that filed amicus briefs (no individual people)
 }
 
 enum DecisionKind {

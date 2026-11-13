@@ -17,8 +17,13 @@ export default async function RevolvingDoorPage() {
       <div className="mt-4 max-w-3xl rounded-md border border-line bg-surface p-3 text-sm text-ink-2">
         <p className="font-semibold text-ink">Is this legal?</p>
         <p className="mt-1">
-          Generally, yes. The Lobbying Disclosure Act requires registered lobbyists to disclose prior &ldquo;covered&rdquo; government positions; having held one does not bar a person from lobbying.
-          Separate federal ethics rules restrict some former officials for a limited time after they leave. This page does not assess whether anyone followed those rules, and listing a prior role does not suggest wrongdoing.
+          Generally, yes. The Lobbying Disclosure Act requires a lobbyist&apos;s registration to list any &ldquo;covered&rdquo; executive or legislative branch position held in the 20 years before they began lobbying for the client (
+          <a href="https://uscode.house.gov/us/usc/t2/s1603/" target="_blank" rel="noopener noreferrer">2 U.S.C. § 1603(b)(6) ↗</a>). Disclosure is the requirement; having held such a position does not by itself bar someone from lobbying.
+        </p>
+        <p className="mt-2">
+          Separately, federal ethics law restricts certain contacts by former officials: permanently for particular matters they worked on, and for one or two years for some roles, including senior executive branch personnel and Members of Congress and legislative staff (
+          <a href="https://uscode.house.gov/us/usc/t18/s207/" target="_blank" rel="noopener noreferrer">18 U.S.C. § 207, subsections (a), (c), (d), (e) ↗</a>).
+          This page does not assess whether anyone followed those rules, and listing a prior role does not suggest wrongdoing.
         </p>
       </div>
       <p className="mt-6 text-sm text-muted">{rows.length} lobbyists on case-related activity near a decision; {withRoles.length} reported at least one prior government position.</p>

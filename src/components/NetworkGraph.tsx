@@ -111,6 +111,7 @@ export function NetworkGraph({ nodes, edges }: { nodes: NodeIn[]; edges: EdgeIn[
               {k.shape === "diamond" && <path d="M6 0 12 6 6 12 0 6Z" fill={`var(${k.slot})`} />}
               {k.shape === "triangle" && <path d="M6 0 12 11H0Z" fill={`var(${k.slot})`} />}
               {k.shape === "hexagon" && <path d="M3 1h6l3 5-3 5H3L0 6Z" fill={`var(${k.slot})`} />}
+              {k.shape === "pentagon" && <path d="M6 0 12 4.5 9.8 12H2.2L0 4.5Z" fill={`var(${k.slot})`} />}
               {(k.shape === "rectangle" || k.shape === "round-rectangle") && <rect x="1" y="1" width="10" height="10" rx={k.shape === "round-rectangle" ? 3 : 0} fill={`var(${k.slot})`} />}
             </svg>
             {k.label}

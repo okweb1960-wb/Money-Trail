@@ -280,5 +280,20 @@
         }
       ]
     }
-  ]
+  ],
+  "amicus": {
+    "_comment": "Organizations that filed amicus briefs become 'organization' nodes. Filers already listed as officials, the United States, and filers named as individual people are excluded.",
+    "exclude": [
+      {
+        "pattern": "^(the )?United States$",
+        "reason": "Already shown as the Solicitor General"
+      },
+      {
+        "pattern": "^(Professor|Dr\\.|Former )",
+        "reason": "Individual people, not public officials or organizations"
+      }
+    ],
+    "petitionStageDecision": "cert_granted",
+    "meritsStageDecision": "opinion"
+  }
 }

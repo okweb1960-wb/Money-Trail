@@ -228,6 +228,36 @@ async function main() {
     }
   }
 
+  // ---------- Organizations that filed amicus briefs ----------
+  let nOrgs = 0;
+  if (c.amicus) {
+    const officialPatterns = c.officials.filter((o) => o.docketMatch).map((o) => new RegExp(o.docketMatch!, "i"));
+    const grant = decisions.get(c.amicus.petitionStageDecision);
+    const orgs = new Map<string, Array<{ date: Date; url: string; key: string }>>();
+    for (const e of docketEntries) {
+      const text = strip(e.Text);
+      const m = text.match(/^Brief amic(?:us|i) curiae of (.+?) filed\./i);
+      if (!m) continue;
+      if (officialPatterns.some((re) => re.test(text))) continue;
+      const name = m[1].trim();
+      if (c.amicus.exclude.some((x) => new RegExp(x.pattern, "i").test(name))) continue;
+      const date = docketDate(e.Date);
+      const key = grant && date < grant.date ? c.amicus.petitionStageDecision : c.amicus.meritsStageDecision;
+      const url = e.Links?.find((l: any) => l.Description === "Main Document")?.DocumentUrl ?? DOCKET_HTML;
+      orgs.set(name, [...(orgs.get(name) ?? []), { date, url, key }]);
+    }
+    for (const [name, briefs] of orgs) {
+      const id = `org:${name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`;
+      await prisma.entity.create({ data: { id, kind: "organization", name, subtitle: `Filed ${briefs.length} amicus brief${briefs.length > 1 ? "s" : ""}. The docket entry does not say which side it supported.`, review: "approved", sourceUrl: briefs[0].url, retrievedAt: d(docketRetrieved) } });
+      for (const [i, b] of briefs.entries()) {
+        const dec = decisions.get(b.key);
+        if (!dec) continue;
+        await prisma.edge.create({ data: { id: `edge:filed_in:${id}:${i}`, type: "filed_in", fromId: id, toId: null, decisionId: dec.id, date: b.date, note: `Amicus brief filed ${b.date.toISOString().slice(0, 10)}`, sourceUrl: b.url, retrievedAt: d(docketRetrieved) } });
+      }
+      nOrgs++;
+    }
+  }
+
   // ---------- FEC ----------
   const fec = readRaw<any[]>("fec/committees.json");
   const cands = readRaw<any[]>("fec/candidates.json").data;
@@ -308,7 +338,7 @@ async function main() {
     }
   }
 
-  console.log(`Loaded: ${decisions.size} decisions/events, ${nFilings} LD-2 filings, ${nActs} activities, ${firms.size} firms, ${tiedLobbyists.size} lobbyists, ${nContrib} FEC disbursements (excluded ${nExcludedState} state/local, ${nAffiliated} affiliated transfers), ${n203} LD-203 items to case officials, ${nClaims} claims`);
+  console.log(`Loaded: ${decisions.size} decisions/events, ${nFilings} LD-2 filings, ${nActs} activities, ${firms.size} firms, ${tiedLobbyists.size} lobbyists, ${nContrib} FEC disbursements (excluded ${nExcludedState} state/local, ${nAffiliated} affiliated transfers), ${n203} LD-203 items to case officials, ${nOrgs} amicus organizations, ${nClaims} claims`);
   if (warn.length) console.log("Warnings:\n" + warn.map((w) => "  - " + w).join("\n"));
 }
 

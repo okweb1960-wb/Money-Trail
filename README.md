@@ -46,7 +46,7 @@ Screening rules only *propose* labels. A person confirms them in three CSV files
 | `data/review/lda-activities.csv` | Whether each distinct lobbying text is about the case | `glyphosate_direct` / `pesticide_policy` / `general` |
 | `data/review/revolving-door.csv` | A note on whether a prior government role overlaps with the client's industry | your note, or `none` |
 
-Until a row is reviewed, the app shows the proposal with a **pending review** label.
+Until a row is reviewed, the app shows the proposal with a **pending review** label. A first review pass was done on 2026-11-13 by Claude on the owner's instruction; the `reviewed_by` and `review_note` columns record each decision and its reason.
 
 ## Scripts
 

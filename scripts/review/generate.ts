@@ -46,9 +46,11 @@ function main() {
         proposed,
         reason: proposed === "yes" ? "Corporate Bayer/Monsanto name (or a firm filing on its behalf)" : "Not clearly the company (could be a different business or a private person)",
         approved: prevA.get(alias)?.approved ?? "",
+        reviewed_by: prevA.get(alias)?.reviewed_by ?? "",
+        review_note: prevA.get(alias)?.review_note ?? "",
       };
     });
-  writeCsv(join(DIR, "lda-client-aliases.csv"), aliasRows, ["alias", "filings_in_window", "first_quarter", "last_quarter", "proposed", "reason", "approved"]);
+  writeCsv(join(DIR, "lda-client-aliases.csv"), aliasRows, ["alias", "filings_in_window", "first_quarter", "last_quarter", "proposed", "reason", "approved", "reviewed_by", "review_note"]);
   console.log(`  lda-client-aliases.csv: ${aliasRows.length} names (${aliasRows.filter((r) => r.proposed === "yes").length} proposed yes)`);
 
   // 2) Distinct activity texts that hit screening terms (strong or weak)
@@ -72,9 +74,9 @@ function main() {
   }
   const order: Record<string, number> = { glyphosate_direct: 0, pesticide_policy: 1, general: 2 };
   const actRows = [...acts.values()]
-    .map((e) => ({ ...e, quarters_seen: [...e.quarters].sort().join(" "), n_quarters: e.quarters.size, approved: prevB.get(e.key)?.approved ?? "" }))
+    .map((e) => ({ ...e, quarters_seen: [...e.quarters].sort().join(" "), n_quarters: e.quarters.size, approved: prevB.get(e.key)?.approved ?? "", reviewed_by: prevB.get(e.key)?.reviewed_by ?? "", review_note: prevB.get(e.key)?.review_note ?? "" }))
     .sort((a, b) => order[a.proposed] - order[b.proposed] || b.n_quarters - a.n_quarters);
-  writeCsv(join(DIR, "lda-activities.csv"), actRows, ["key", "registrant", "issue_code", "proposed", "matched", "n_quarters", "quarters_seen", "text", "example_url", "approved"]);
+  writeCsv(join(DIR, "lda-activities.csv"), actRows, ["key", "registrant", "issue_code", "proposed", "matched", "n_quarters", "quarters_seen", "text", "example_url", "approved", "reviewed_by", "review_note"]);
   const by = (r: string) => actRows.filter((x) => x.proposed === r).length;
   console.log(`  lda-activities.csv: ${actRows.length} distinct texts (direct ${by("glyphosate_direct")}, pesticide ${by("pesticide_policy")}, general ${by("general")})`);
 
@@ -93,11 +95,11 @@ function main() {
         const key = `${l.lobbyist.id}|${cp}`;
         if (cpRows.has(key)) continue;
         const m = cp.match(OVERLAP);
-        cpRows.set(key, { key, lobbyist: name, covered_position: cp, proposed_overlap: m ? `Mentions "${m[0]}" — related to the client's agriculture/pesticide business` : "", example_url: f.filing_document_url, approved_overlap: prevC.get(key)?.approved_overlap ?? "" });
+        cpRows.set(key, { key, lobbyist: name, covered_position: cp, proposed_overlap: m ? `Mentions "${m[0]}" — related to the client's agriculture/pesticide business` : "", example_url: f.filing_document_url, approved_overlap: prevC.get(key)?.approved_overlap ?? "", reviewed_by: prevC.get(key)?.reviewed_by ?? "", review_note: prevC.get(key)?.review_note ?? "" });
       }
     }
   }
-  writeCsv(join(DIR, "revolving-door.csv"), [...cpRows.values()].sort((a, b) => a.lobbyist.localeCompare(b.lobbyist)), ["key", "lobbyist", "covered_position", "proposed_overlap", "example_url", "approved_overlap"]);
+  writeCsv(join(DIR, "revolving-door.csv"), [...cpRows.values()].sort((a, b) => a.lobbyist.localeCompare(b.lobbyist)), ["key", "lobbyist", "covered_position", "proposed_overlap", "example_url", "approved_overlap", "reviewed_by", "review_note"]);
   console.log(`  revolving-door.csv: ${cpRows.size} covered positions (${[...cpRows.values()].filter((r) => r.proposed_overlap).length} with a proposed overlap note)`);
 }
 

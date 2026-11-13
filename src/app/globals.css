@@ -20,6 +20,7 @@
   --s4: #eda100; /* case-related entries / lobbyists */
   --s5: #e87ba4; /* officials */
   --s6: #008300; /* decisions */
+  --s7: #6250d6; /* organizations (amicus filers) */
   --record-bg: #e8eef7;
   --record-ink: #184f95;
   --claim-bg: #f3efe7;
@@ -45,6 +46,7 @@
     --s4: #c98500;
     --s5: #d55181;
     --s6: #008300;
+    --s7: #9085e9;
     --record-bg: #17283f;
     --record-ink: #b7d3f6;
     --claim-bg: #2e2617;
@@ -70,6 +72,7 @@
   --s4: #c98500;
   --s5: #d55181;
   --s6: #008300;
+  --s7: #9085e9;
   --record-bg: #17283f;
   --record-ink: #b7d3f6;
   --claim-bg: #2e2617;
