@@ -21,6 +21,9 @@ export default async function ClaimsPage() {
       <p className="mt-2 max-w-3xl text-[15px] text-ink-2">
         Statements made in public by named people, shown next to what the public record does and does not show. A <ClaimBadge className="align-middle" /> is an allegation, not a verified fact. A <RecordBadge className="align-middle" /> item comes from a primary public source.
       </p>
+      {claims.length > 0 && (
+        <p className="mt-3 max-w-3xl text-sm text-muted">Only statements about the decisions in this case are included. Allegations about private individuals, and allegations of crimes that the loaded public records cannot address, are left out on purpose.</p>
+      )}
       {claims.length === 0 ? (
         <div className="mt-6 max-w-3xl rounded-lg border border-dashed border-line bg-surface p-5 text-[15px]">
           <p className="font-semibold">No claims are loaded yet.</p>
@@ -35,7 +38,11 @@ export default async function ClaimsPage() {
             <article key={c.id} className="rounded-lg border border-line bg-surface p-4">
               <div className="flex flex-wrap items-center gap-2"><ClaimBadge /><span className="text-sm text-ink-2">{c.speaker} · {c.venue}{c.timestamp ? ` · ${c.timestamp}` : ""}</span></div>
               <blockquote className="mt-2 border-l-2 border-dashed pl-3 text-[15px] italic" style={{ borderColor: "var(--claim-ink)" }}>&ldquo;{c.statement}&rdquo;</blockquote>
-              <SourceLink href={c.sourceUrl} retrievedAt={c.retrievedAt}>Where it was said</SourceLink>
+              <p className="mt-1 flex flex-wrap gap-x-4">
+                <SourceLink href={c.sourceUrl} retrievedAt={c.retrievedAt}>Episode at {c.timestamp?.split("–")[0] ?? "timestamp"}</SourceLink>
+                {c.transcriptUrl && <SourceLink href={c.transcriptUrl}>Transcript</SourceLink>}
+              </p>
+              {c.verificationNote && <p className="mt-1 text-xs text-muted">{c.verificationNote}</p>}
               <p className="mt-3 text-sm font-medium">{STATUS[c.status] ?? c.status}</p>
               <div className="mt-2 grid gap-3 sm:grid-cols-2">
                 <div className="rounded-md bg-surface-2 p-3">

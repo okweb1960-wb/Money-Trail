@@ -147,13 +147,13 @@ export async function getRevolvingDoor(): Promise<RevolvingRow[]> {
   }));
 }
 
-export interface ClaimRow { id: string; speaker: string; venue: string; statement: string; timestamp: string | null; status: string; recordShows: Array<{ text: string; refs: string[] }>; recordDoesNotShow: Array<{ text: string; refs: string[] }>; sourceUrl: string; retrievedAt: string }
+export interface ClaimRow { id: string; speaker: string; venue: string; statement: string; timestamp: string | null; status: string; recordShows: Array<{ text: string; refs: string[] }>; recordDoesNotShow: Array<{ text: string; refs: string[] }>; transcriptUrl: string | null; verificationNote: string | null; sourceUrl: string; retrievedAt: string }
 
 export async function getClaims(): Promise<ClaimRow[]> {
   "use cache";
   cacheLife("max");
   const rows = await prisma.claim.findMany({ where: { caseSlug: CASE_SLUG } });
-  return rows.map((c) => ({ id: c.id, speaker: c.speaker, venue: c.venue, statement: c.statement, timestamp: c.timestamp, status: c.status, recordShows: JSON.parse(c.recordShows ?? "[]"), recordDoesNotShow: JSON.parse(c.recordDoesNotShow ?? "[]"), sourceUrl: c.sourceUrl, retrievedAt: c.retrievedAt.toISOString() }));
+  return rows.map((c) => ({ id: c.id, speaker: c.speaker, venue: c.venue, statement: c.statement, timestamp: c.timestamp, status: c.status, recordShows: JSON.parse(c.recordShows ?? "[]"), recordDoesNotShow: JSON.parse(c.recordDoesNotShow ?? "[]"), transcriptUrl: c.transcriptUrl, verificationNote: c.verificationNote, sourceUrl: c.sourceUrl, retrievedAt: c.retrievedAt.toISOString() }));
 }
 
 export interface DataRunRow { id: string; source: string; ranAt: string; notes: string | null }

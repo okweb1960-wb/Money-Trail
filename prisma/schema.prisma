@@ -192,6 +192,8 @@ model Claim {
   statement         String
   timestamp         String?
   status            ClaimStatus @default(unreviewed)
+  transcriptUrl     String? // where the wording was taken from (if not the original recording)
+  verificationNote  String?
   recordShows       String? // JSON array of {text, refs:[url]}
   recordDoesNotShow String? // JSON array of {text, refs:[url]}
   sourceUrl         String

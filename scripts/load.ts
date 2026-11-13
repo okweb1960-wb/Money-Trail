@@ -303,7 +303,7 @@ async function main() {
     const claims = JSON.parse(readFileSync(claimsPath, "utf8")).claims ?? [];
     for (const cl of claims) {
       if (!cl.sourceUrl || !cl.retrievedAt || !cl.statement) { warn.push(`Claim ${cl.id} skipped: missing source/statement`); continue; }
-      await prisma.claim.create({ data: { id: cl.id, caseSlug: c.slug, speaker: cl.speaker, venue: cl.venue, statement: cl.statement, timestamp: cl.timestamp ?? null, status: cl.status ?? "unreviewed", recordShows: JSON.stringify(cl.recordShows ?? []), recordDoesNotShow: JSON.stringify(cl.recordDoesNotShow ?? []), sourceUrl: cl.sourceUrl, retrievedAt: d(cl.retrievedAt) } });
+      await prisma.claim.create({ data: { id: cl.id, caseSlug: c.slug, speaker: cl.speaker, venue: cl.venue, statement: cl.statement, timestamp: cl.timestamp ?? null, status: cl.status ?? "unreviewed", transcriptUrl: cl.transcriptUrl ?? null, verificationNote: cl.verificationNote ?? null, recordShows: JSON.stringify(cl.recordShows ?? []), recordDoesNotShow: JSON.stringify(cl.recordDoesNotShow ?? []), sourceUrl: cl.sourceUrl, retrievedAt: d(cl.retrievedAt) } });
       nClaims++;
     }
   }

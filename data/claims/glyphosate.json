@@ -1,0 +1,246 @@
+{
+  "_about": "Claims are allegations by a named person, shown as CLAIM. Each is compared with RECORD items. Allegations about private individuals and allegations of crimes that the loaded records cannot address are intentionally not included.",
+  "claims": [
+    {
+      "speaker": "Calley Means",
+      "venue": "The Joe Rogan Experience #2578",
+      "transcriptUrl": "https://singjupost.com/transcript-calley-means-interview-on-joe-rogan-experience-2578/",
+      "retrievedAt": "2026-11-13T00:00:00Z",
+      "verificationNote": "Wording taken from a third-party transcript (The Singju Post). The timestamp links to the episode video, which could not be opened from the build environment to check the wording against the audio.",
+      "id": "means-eo-national-security",
+      "timestamp": "00:24:41–00:28:15",
+      "sourceUrl": "https://www.youtube.com/watch?v=dMBBOawFy_4&t=1481s",
+      "statement": "And it was the glyphosate EO that says it’s a national security issue, we need to have glyphosate, and alluded to liability protection using national defense, reasons.",
+      "status": "partially_supported",
+      "recordShows": [
+        {
+          "text": "Executive Order 14387, “Promoting the National Defense by Ensuring an Adequate Supply of Elemental Phosphorus and Glyphosate- Based Herbicides”, was signed on 2026-02-18 and published on 2026-02-23 (91 FR 8703). Its title frames glyphosate supply as a national-defense matter.",
+          "refs": [
+            "https://www.federalregister.gov/documents/2026/02/23/2026-03628/promoting-the-national-defense-by-ensuring-an-adequate-supply-of-elemental-phosphorus-and"
+          ]
+        }
+      ],
+      "recordDoesNotShow": [
+        {
+          "text": "Whether the order’s text refers to liability protection. This app has not yet been able to retrieve the order’s full text, so this part is not checked.",
+          "refs": [
+            "https://www.federalregister.gov/documents/2026/02/23/2026-03628/promoting-the-national-defense-by-ensuring-an-adequate-supply-of-elemental-phosphorus-and"
+          ]
+        },
+        {
+          "text": "Who drafted the order or how it was decided inside the White House. Lobbying reports and the Federal Register do not record that.",
+          "refs": []
+        }
+      ]
+    },
+    {
+      "speaker": "Calley Means",
+      "venue": "The Joe Rogan Experience #2578",
+      "transcriptUrl": "https://singjupost.com/transcript-calley-means-interview-on-joe-rogan-experience-2578/",
+      "retrievedAt": "2026-11-13T00:00:00Z",
+      "verificationNote": "Wording taken from a third-party transcript (The Singju Post). The timestamp links to the episode video, which could not be opened from the build environment to check the wording against the audio.",
+      "id": "means-eo-timing-court",
+      "timestamp": "00:28:20–00:30:58",
+      "sourceUrl": "https://www.youtube.com/watch?v=dMBBOawFy_4&t=1700s",
+      "statement": "I went and informed Bobby, and it was announced the next day. Around the same time, the Supreme Court was deciding whether to take a case that revolved around liability protection for glyphosate.",
+      "status": "partially_supported",
+      "recordShows": [
+        {
+          "text": "The Supreme Court granted review in Monsanto Co. v. Durnell on 2026-01-16, on whether federal pesticide law (FIFRA) preempts a label-based failure-to-warn claim where EPA has not required the warning.",
+          "refs": [
+            "https://www.supremecourt.gov/search.aspx?filename=/docket/docketfiles/html/public/24-1068.html"
+          ]
+        },
+        {
+          "text": "The executive order was signed on 2026-02-18, 33 days after the Court had already agreed to hear the case.",
+          "refs": [
+            "https://www.federalregister.gov/documents/2026/02/23/2026-03628/promoting-the-national-defense-by-ensuring-an-adequate-supply-of-elemental-phosphorus-and",
+            "https://www.supremecourt.gov/search.aspx?filename=/docket/docketfiles/html/public/24-1068.html"
+          ]
+        }
+      ],
+      "recordDoesNotShow": [
+        {
+          "text": "The internal White House events described (who presented the order, who was told). These are not in public records.",
+          "refs": []
+        }
+      ]
+    },
+    {
+      "speaker": "Calley Means",
+      "venue": "The Joe Rogan Experience #2578",
+      "transcriptUrl": "https://singjupost.com/transcript-calley-means-interview-on-joe-rogan-experience-2578/",
+      "retrievedAt": "2026-11-13T00:00:00Z",
+      "verificationNote": "Wording taken from a third-party transcript (The Singju Post). The timestamp links to the episode video, which could not be opened from the build environment to check the wording against the audio.",
+      "id": "means-sg-brief-harris",
+      "timestamp": "00:28:20–00:30:58",
+      "sourceUrl": "https://www.youtube.com/watch?v=dMBBOawFy_4&t=1700s",
+      "statement": "And the Department of Justice brought in a lawyer named Sarah Harris to the Solicitor General’s Office. Sarah came from the law firm that is Bayer’s main law firm, and she wrote an opinion saying that the Supreme Court should take the case and give liability protection to Bayer, and that came out.",
+      "status": "partially_supported",
+      "recordShows": [
+        {
+          "text": "The U.S. brief that urged the Court to take the case (filed 2025-12-01) concludes: “The petition for a writ of certiorari should be granted.” Its signature block lists D. John Sauer, Malcolm L. Stewart, Robert N. Stander, Ashley Robertson, Matthew Oakes and Cynthia Taub. Sarah Harris is not listed on it.",
+          "refs": [
+            "https://www.supremecourt.gov/DocketPDF/24/24-1068/386073/20251201170732560_24-1068%20--%20Monsanto%20v.%20Durnell.pdf"
+          ]
+        },
+        {
+          "text": "The later U.S. merits brief (filed 2026-03-02) lists Sarah M. Harris, Deputy Solicitor General, among its signers and concludes that the Missouri court’s judgment “should be reversed”, supporting Monsanto (the petitioner).",
+          "refs": [
+            "https://www.supremecourt.gov/DocketPDF/24/24-1068/399785/20260302183259184_24-1068%20Monsanto%20tsac.pdf"
+          ]
+        },
+        {
+          "text": "She argued the case for the United States on 2026-04-27, listed on the docket as Principal Deputy Solicitor General.",
+          "refs": [
+            "https://www.supremecourt.gov/search.aspx?filename=/docket/docketfiles/html/public/24-1068.html"
+          ]
+        }
+      ],
+      "recordDoesNotShow": [
+        {
+          "text": "Her prior employer, or which law firm is “Bayer’s main law firm”. Neither is in the records loaded here.",
+          "refs": []
+        }
+      ]
+    },
+    {
+      "speaker": "Calley Means",
+      "venue": "The Joe Rogan Experience #2578",
+      "transcriptUrl": "https://singjupost.com/transcript-calley-means-interview-on-joe-rogan-experience-2578/",
+      "retrievedAt": "2026-11-13T00:00:00Z",
+      "verificationNote": "Wording taken from a third-party transcript (The Singju Post). The timestamp links to the episode video, which could not be opened from the build environment to check the wording against the audio.",
+      "id": "means-court-would-not-have-taken",
+      "timestamp": "00:31:01–00:31:09",
+      "sourceUrl": "https://www.youtube.com/watch?v=dMBBOawFy_4&t=1861s",
+      "statement": "Yeah. Yeah, the Supreme Court ended up siding with the case, which they wouldn’t have taken without that. Brief and urging from the administration to take it.",
+      "status": "partially_supported",
+      "recordShows": [
+        {
+          "text": "Sequence on the docket: the Court invited the Solicitor General’s views (2025-06-30); the U.S. brief recommended review (2025-12-01); the Court granted review (2026-01-16); the Court reversed the Missouri judgment (2026-06-25), holding that FIFRA preempts the failure-to-warn claim.",
+          "refs": [
+            "https://www.supremecourt.gov/search.aspx?filename=/docket/docketfiles/html/public/24-1068.html",
+            "https://www.supremecourt.gov/DocketPDF/24/24-1068/386073/20251201170732560_24-1068%20--%20Monsanto%20v.%20Durnell.pdf",
+            "https://www.supremecourt.gov/opinions/25pdf/24-1068_n7ip.pdf"
+          ]
+        }
+      ],
+      "recordDoesNotShow": [
+        {
+          "text": "What the Court would have done without the U.S. brief. Court records cannot show a counterfactual.",
+          "refs": []
+        }
+      ]
+    },
+    {
+      "speaker": "Calley Means",
+      "venue": "The Joe Rogan Experience #2578",
+      "transcriptUrl": "https://singjupost.com/transcript-calley-means-interview-on-joe-rogan-experience-2578/",
+      "retrievedAt": "2026-11-13T00:00:00Z",
+      "verificationNote": "Wording taken from a third-party transcript (The Singju Post). The timestamp links to the episode video, which could not be opened from the build environment to check the wording against the audio.",
+      "id": "means-ballard",
+      "timestamp": "00:34:58–00:35:04",
+      "sourceUrl": "https://www.youtube.com/watch?v=dMBBOawFy_4&t=2098s",
+      "statement": "Just got liability removed after paying Ballard a ton of money.",
+      "status": "partially_supported",
+      "recordShows": [
+        {
+          "text": "Ballard Partners reported lobbying for Bayer U.S. LLC from 2024-Q4 to 2026-Q3, with $660,000 in reported income ($30,000 in 2024-Q4, then $90,000 a quarter). Its stated issue: “Communicate with Members of Congress, staff, and the Administration on the importance of crop protection tools for agricultural purposes, including sustainability benefits.” Bodies listed include the White House Office.",
+          "refs": [
+            "https://lda.gov/filings/public/filing/c6b621a9-2a60-41f6-a28d-c5bf8a9b7103/print/",
+            "https://lda.gov/filings/public/filing/8f8e045f-f3bc-4b7c-bca8-08c780424780/print/"
+          ]
+        },
+        {
+          "text": "The Supreme Court held on 2026-06-25 that FIFRA preempts a state-law failure-to-warn claim that would require a cancer warning on Roundup’s label.",
+          "refs": [
+            "https://www.supremecourt.gov/opinions/25pdf/24-1068_n7ip.pdf"
+          ]
+        }
+      ],
+      "recordDoesNotShow": [
+        {
+          "text": "Any link between Ballard’s lobbying and the Court’s decision. The Lobbying Disclosure Act does not cover contacts with courts, and Ballard’s reports do not mention the case.",
+          "refs": []
+        },
+        {
+          "text": "That “liability” in general was removed. The ruling concerns label-based failure-to-warn claims; read the opinion for its exact scope.",
+          "refs": [
+            "https://www.supremecourt.gov/opinions/25pdf/24-1068_n7ip.pdf"
+          ]
+        }
+      ]
+    },
+    {
+      "speaker": "Calley Means",
+      "venue": "The Joe Rogan Experience #2578",
+      "transcriptUrl": "https://singjupost.com/transcript-calley-means-interview-on-joe-rogan-experience-2578/",
+      "retrievedAt": "2026-11-13T00:00:00Z",
+      "verificationNote": "Wording taken from a third-party transcript (The Singju Post). The timestamp links to the episode video, which could not be opened from the build environment to check the wording against the audio.",
+      "id": "means-farm-bill",
+      "timestamp": "00:24:41–00:28:15",
+      "sourceUrl": "https://www.youtube.com/watch?v=dMBBOawFy_4&t=1481s",
+      "statement": "Those lawsuits are threatening Bayer, and the top issue for them was getting those lawsuits off their back. […] Then they tried to jam something into the farm bill.",
+      "status": "partially_supported",
+      "recordShows": [
+        {
+          "text": "A firm working on Bayer’s behalf as a sub-contractor (Lynn Tjeerdsma Consulting, via Akin Gump) reported the issue “Glyphosate liability protection in legislation”, contacting the Senate, in every quarter from 2025-Q4 to 2026-Q3.",
+          "refs": [
+            "https://lda.gov/filings/public/filing/ab50a9ac-71c7-4729-86c9-063e219d6d8b/print/",
+            "https://lda.gov/filings/public/filing/839b6efd-52ac-4c6c-b522-680b20f0101d/print/"
+          ]
+        },
+        {
+          "text": "Bayer’s own lobbying reports list “the uniformity of pesticide labeling” among appropriations issues in 2025 and 2026.",
+          "refs": [
+            "https://lda.gov/filings/public/filing/a229bfd0-5906-4e09-949f-3e2dab8d1b73/print/"
+          ]
+        }
+      ],
+      "recordDoesNotShow": [
+        {
+          "text": "Which bill the liability language was meant for. The entries do not name the farm bill.",
+          "refs": []
+        },
+        {
+          "text": "Bayer’s priorities, or state-level legislation. State lobbying is outside these federal records.",
+          "refs": []
+        }
+      ]
+    },
+    {
+      "speaker": "Calley Means",
+      "venue": "The Joe Rogan Experience #2578",
+      "transcriptUrl": "https://singjupost.com/transcript-calley-means-interview-on-joe-rogan-experience-2578/",
+      "retrievedAt": "2026-11-13T00:00:00Z",
+      "verificationNote": "Wording taken from a third-party transcript (The Singju Post). The timestamp links to the episode video, which could not be opened from the build environment to check the wording against the audio.",
+      "id": "means-epa-review",
+      "timestamp": "00:24:41–00:28:15",
+      "sourceUrl": "https://www.youtube.com/watch?v=dMBBOawFy_4&t=1481s",
+      "statement": "But you have to understand, the EPA hasn’t reviewed glyphosate in close to 30 years. And they currently say that it does not cause cancer.",
+      "status": "partially_supported",
+      "recordShows": [
+        {
+          "text": "The Supreme Court’s opinion says EPA reregistered glyphosate products in 1993, re-examined the issue in 2017 and 2019, reiterated its position in a 2020 interim decision, and that a federal appeals court vacated the 2020 decision in 2022 (opinion, pp. 6–7). The most recent full (non-interim) decision it lists is the 1993 reregistration.",
+          "refs": [
+            "https://www.supremecourt.gov/opinions/25pdf/24-1068_n7ip.pdf"
+          ]
+        },
+        {
+          "text": "The Court’s syllabus states that EPA “has repeatedly evaluated glyphosate and repeatedly concluded that glyphosate is not likely to cause cancer.”",
+          "refs": [
+            "https://www.supremecourt.gov/opinions/25pdf/24-1068_n7ip.pdf"
+          ]
+        }
+      ],
+      "recordDoesNotShow": [
+        {
+          "text": "That EPA has not reviewed glyphosate in about 30 years. The opinion lists EPA reviews in 2017, 2019 and 2020.",
+          "refs": [
+            "https://www.supremecourt.gov/opinions/25pdf/24-1068_n7ip.pdf"
+          ]
+        }
+      ]
+    }
+  ]
+}
