@@ -28,7 +28,7 @@ export function FilingsTable({ rows }: { rows: FilingRowIn[] }) {
 
   return (
     <div>
-      <div className="flex flex-wrap items-center gap-2 text-sm">
+      <div className="flex flex-wrap items-center gap-2 text-sm" data-snapshot="controls">
         <label className="flex items-center gap-1">Year
           <select value={year} onChange={(e) => setYear(e.target.value)} className="rounded border border-line bg-surface px-2 py-1">
             <option value="all">All</option>

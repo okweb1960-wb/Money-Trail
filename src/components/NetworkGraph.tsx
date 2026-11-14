@@ -135,8 +135,8 @@ export function NetworkGraph({ nodes, edges }: { nodes: NodeIn[]; edges: EdgeIn[
         ))}
       </fieldset>
       <div className="mt-3 grid gap-4 lg:grid-cols-[1fr_320px]">
-        <div ref={box} className="h-[620px] rounded-lg border border-line bg-surface" role="img" aria-label="Network graph of companies, lobbying firms, lobbyists, PACs, officials and decisions. A table version follows." />
-        <aside className="rounded-lg border border-line bg-surface p-3 text-sm" aria-live="polite">
+        <div ref={box} data-snapshot="graph" className="h-[620px] rounded-lg border border-line bg-surface" role="img" aria-label="Network graph of companies, lobbying firms, lobbyists, PACs, officials and decisions. A table version follows." />
+        <aside className="rounded-lg border border-line bg-surface p-3 text-sm" aria-live="polite" data-snapshot="graph-panel">
           {!node && <p className="text-muted">Click a node to see who it is, how it is connected, and the public records behind it.</p>}
           {node && (
             <div>

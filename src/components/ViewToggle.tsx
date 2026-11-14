@@ -57,5 +57,5 @@ export function ViewToggle() {
 
 export function ViewOnly({ view, children }: { view: View; children: React.ReactNode }) {
   const ctx = useContext(Ctx);
-  return <div hidden={ctx.view !== view}>{children}</div>;
+  return <div hidden={ctx.view !== view} data-view={view}>{children}</div>;
 }
