@@ -222,6 +222,13 @@ async function main() {
     warn.push("data/raw/scotus/amicus-briefs.json missing — run npm run fetch:amicus; amicus sides not shown");
   }
   const sideByUrl = new Map(amicusSides.map((x) => [x.url, x]));
+  // Amicus organizations' own federal lobbying (data/raw/lda/amicus-orgs.json, from npm run fetch:amicus-lda)
+  let amicusLda: Array<{ filer: string; filingsFound: number; reportedInHouseExpenses: number; outsideFirmIncome?: number; years: number[]; exampleFiling: string | null }> = [];
+  try {
+    amicusLda = readRaw<any[]>("lda/amicus-orgs.json").data;
+  } catch {
+    warn.push("data/raw/lda/amicus-orgs.json missing — run npm run fetch:amicus-lda");
+  }
 
   // ---------- Officials ----------
   const officialDecision = new Map<string, string>();
@@ -296,6 +303,15 @@ async function main() {
         filer: isIndividuals ? "Individuals (not named on this site)" : x.filer,
         filerKind, entityId: isUS ? "official:us-sg" : off?.id ?? org?.id ?? null,
         stage: grantDate && filedOn < grantDate ? "petition" : "merits", filedOn, side: x.side, sidePhrase: x.coverPhrase,
+        disclosure: (x as any).disclosure?.statement ?? null,
+        partyCounselDenied: (x as any).disclosure?.partyCounselAuthoredDenied ?? null,
+        membersExcepted: (x as any).disclosure?.membersExcepted ?? null,
+        partyMentions: JSON.stringify((x as any).disclosure?.mentionsParty ?? []),
+        counselOverlap: JSON.stringify((x as any).disclosure?.counselOverlap ?? []),
+        ...(() => {
+          const o = filerKind === "organization" ? amicusLda.find((a) => a.filer === x.filer) : undefined;
+          return o && o.filingsFound > 0 ? { ldaInHouse: o.reportedInHouseExpenses, ldaOutside: o.outsideFirmIncome ?? 0, ldaYears: o.years.join("–"), ldaExample: o.exampleFiling } : {};
+        })(),
         sourceUrl: x.url, retrievedAt: d(x.retrieved_at),
       } });
       // SG edges: attach the side of the matching U.S. brief

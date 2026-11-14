@@ -229,6 +229,17 @@ model AmicusBrief {
   filedOn     DateTime
   side        String
   sidePhrase  String?
+  // Rule 37.6 statement, verbatim from the brief, and flags derived from it by rule
+  disclosure        String?
+  partyCounselDenied Boolean? // statement says no counsel for a party authored the brief
+  membersExcepted   Boolean? // money from the filer's own members is excluded from the "no other money" statement
+  partyMentions     String   @default("[]") // sentences in the statement naming a party or its parent company
+  counselOverlap    String   @default("[]") // sentences saying the brief's counsel (or their firm) represent a side in related litigation
+  // The filer's own federal lobbying (Senate LDA), for organizations
+  ldaInHouse        Float?
+  ldaOutside        Float?
+  ldaYears          String?
+  ldaExample        String?
   sourceUrl   String
   retrievedAt DateTime
 }

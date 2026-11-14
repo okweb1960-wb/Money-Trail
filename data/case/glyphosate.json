@@ -18,7 +18,11 @@
   "scotus": {
     "docket": "24-1068",
     "expect_petitioner": "Monsanto",
-    "expect_respondent": "Durnell"
+    "expect_respondent": "Durnell",
+    "related_parties": [
+      "Bayer"
+    ],
+    "_related_parties_note": "Names treated as 'a party or its parent' when scanning amicus disclosure statements. Bayer: the LDA filings list 'BAYER CORPORATION (FKA MONSANTO COMPANY)', and CropLife's briefs call Bayer Corp. 'Monsanto Company's parent company'."
   },
   "federal_register": {
     "search_term": "glyphosate",

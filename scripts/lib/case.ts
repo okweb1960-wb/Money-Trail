@@ -30,7 +30,7 @@ export interface CaseCfg {
   company: { id: string; name: string };
   lda_client_search_terms: string[];
   fec_committee_ids: string[];
-  scotus: { docket: string; expect_petitioner: string; expect_respondent: string };
+  scotus: { docket: string; expect_petitioner: string; expect_respondent: string; related_parties?: string[] };
   federal_register: { search_term: string; type: string; subtype: string };
   decisions: CaseDecisionCfg[];
   officials: CaseOfficialCfg[];

@@ -13,13 +13,46 @@ const KIND_LABEL: Record<string, string> = {
 };
 const KIND_ORDER = ["united_states", "government", "official", "organization", "individuals"];
 
+const usd = (n: number) => "$" + Math.round(n).toLocaleString("en-US");
+
 function Row({ r }: { r: AmicusRow }) {
+  const lobbying = (r.ldaInHouse ?? 0) + (r.ldaOutside ?? 0);
   return (
-    <li className="flex flex-wrap items-baseline gap-x-2 border-t border-line py-1.5 first:border-t-0">
-      <span className="font-medium">{r.filer}</span>
-      <span className="tabular text-xs text-muted">{r.filedOn}</span>
-      {r.sidePhrase && <span className="text-xs text-ink-2">cover: &ldquo;{r.sidePhrase}&rdquo;</span>}
-      <a href={r.sourceUrl} target="_blank" rel="noopener noreferrer" className="text-xs">brief ↗</a>
+    <li className="border-t border-line py-1.5 first:border-t-0">
+      <div className="flex flex-wrap items-baseline gap-x-2">
+        <span className="font-medium">{r.filer}</span>
+        <span className="tabular text-xs text-muted">{r.filedOn}</span>
+        {r.sidePhrase && <span className="text-xs text-ink-2">cover: &ldquo;{r.sidePhrase}&rdquo;</span>}
+        <a href={r.sourceUrl} target="_blank" rel="noopener noreferrer" className="text-xs">brief ↗</a>
+      </div>
+      {[...new Set([...r.partyMentions, ...r.counselOverlap])].map((sentence) => (
+        <p key={sentence} className="mt-1 rounded-sm bg-surface-2 px-2 py-1 text-xs">
+          <span className="font-semibold">{r.counselOverlap.includes(sentence) ? "Disclosure about its lawyers: " : "Disclosure naming a party: "}</span>&ldquo;{sentence}&rdquo;
+        </p>
+      ))}
+      <details className="mt-0.5 text-xs">
+        <summary className="cursor-pointer text-ink-2">Who wrote and funded it (as the brief states)</summary>
+        {r.disclosure ? (
+          <div className="mt-1 space-y-1 pl-3">
+            <p>&ldquo;{r.disclosure}&rdquo;</p>
+            <ul className="list-disc pl-4 text-ink-2">
+              <li>A party&apos;s lawyers wrote any of it: {r.partyCounselDenied === true ? "no, according to the statement" : "the statement does not use the usual wording — read it above"}</li>
+              <li>Money from others: {r.membersExcepted ? "none except from the group itself, its members, or its lawyers (members are not named)" : "none except from the filer itself or its lawyers"}</li>
+            </ul>
+          </div>
+        ) : (
+          <p className="mt-1 pl-3 text-ink-2">No authorship or funding statement found in the brief text{r.filerKind === "united_states" || r.filerKind === "government" ? " (government filer)" : ""}.</p>
+        )}
+        {r.filerKind === "organization" && (
+          <p className="mt-1 pl-3 text-ink-2">
+            {lobbying > 0 && r.ldaExample ? (
+              <>Reported its own federal lobbying in {r.ldaYears}: {usd(lobbying)} (<a href={r.ldaExample} target="_blank" rel="noopener noreferrer">LD-2 example ↗</a>). This is what the group spent on lobbying, not who funds the group.</>
+            ) : (
+              <>No federal lobbying reports found under this name for {r.ldaYears ?? "the last two years"}.</>
+            )}
+          </p>
+        )}
+      </details>
     </li>
   );
 }

@@ -27,7 +27,8 @@
     "data": "npm run db:push && npm run db:load && npm run flags",
     "test": "tsx --test src/lib/*.test.ts scripts/fetch/*.test.ts",
     "lint:copy": "tsx scripts/lint-copy.ts",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "fetch:amicus-lda": "tsx scripts/fetch/amicus-lda.ts"
   },
   "devDependencies": {
     "@tailwindcss/turbopack": "4.3.3",

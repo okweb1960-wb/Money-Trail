@@ -159,7 +159,12 @@ export async function getClaims(): Promise<ClaimRow[]> {
   return rows.map((c) => ({ id: c.id, speaker: c.speaker, venue: c.venue, statement: c.statement, timestamp: c.timestamp, status: c.status, recordShows: JSON.parse(c.recordShows ?? "[]"), recordDoesNotShow: JSON.parse(c.recordDoesNotShow ?? "[]"), transcriptUrl: c.transcriptUrl, verificationNote: c.verificationNote, sourceUrl: c.sourceUrl, retrievedAt: c.retrievedAt.toISOString() }));
 }
 
-export interface AmicusRow { id: string; filer: string; filerKind: string; stage: string; filedOn: string; side: string; sidePhrase: string | null; sourceUrl: string; retrievedAt: string }
+export interface AmicusRow {
+  id: string; filer: string; filerKind: string; stage: string; filedOn: string; side: string; sidePhrase: string | null;
+  disclosure: string | null; partyCounselDenied: boolean | null; membersExcepted: boolean | null; partyMentions: string[]; counselOverlap: string[];
+  ldaInHouse: number | null; ldaOutside: number | null; ldaYears: string | null; ldaExample: string | null;
+  sourceUrl: string; retrievedAt: string;
+}
 
 export async function getAmicusBriefs(): Promise<{ rows: AmicusRow[]; petitioner: string; respondent: string }> {
   "use cache";
@@ -167,7 +172,12 @@ export async function getAmicusBriefs(): Promise<{ rows: AmicusRow[]; petitioner
   const rows = await prisma.amicusBrief.findMany({ where: { caseSlug: CASE_SLUG }, orderBy: [{ filedOn: "asc" }, { filer: "asc" }] });
   const info = await prisma.caseInfo.findUnique({ where: { slug: CASE_SLUG } }); // party names as the docket states them
   return {
-    rows: rows.map((r) => ({ id: r.id, filer: r.filer, filerKind: r.filerKind, stage: r.stage, filedOn: day(r.filedOn), side: r.side, sidePhrase: r.sidePhrase, sourceUrl: r.sourceUrl, retrievedAt: r.retrievedAt.toISOString() })),
+    rows: rows.map((r) => ({
+      id: r.id, filer: r.filer, filerKind: r.filerKind, stage: r.stage, filedOn: day(r.filedOn), side: r.side, sidePhrase: r.sidePhrase,
+      disclosure: r.disclosure, partyCounselDenied: r.partyCounselDenied, membersExcepted: r.membersExcepted, partyMentions: JSON.parse(r.partyMentions), counselOverlap: JSON.parse(r.counselOverlap),
+      ldaInHouse: r.ldaInHouse, ldaOutside: r.ldaOutside, ldaYears: r.ldaYears, ldaExample: r.ldaExample,
+      sourceUrl: r.sourceUrl, retrievedAt: r.retrievedAt.toISOString(),
+    })),
     petitioner: info?.petitioner ?? "Petitioner",
     respondent: info?.respondent ?? "Respondent",
   };
