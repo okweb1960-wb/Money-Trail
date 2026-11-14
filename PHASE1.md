@@ -107,7 +107,7 @@ All flags are worded "worth a closer look" and show their baseline and evidence 
   - CropLife America (both briefs, supporting Monsanto): "Monsanto Company's parent company, Bayer Corp., is a member of CropLife America" and pays dues, but did not contribute money intended for the brief.
   - American Tort Reform Association et al. (supporting Monsanto): its counsel wrote it; "other Shook, Hardy & Bacon LLP attorneys are among counsel to Monsanto Company in glyphosate litigation and appeared in the trial court below."
   - Dr. Philip Landrigan et al. (individuals, supporting Durnell): "Counsel for amici disclose that they are counsel for Plaintiffs in other Roundup litigation."
-  - 12 of 32 non-government statements except money from the group's own members (members are not named), on both sides.
+  - 14 of the 31 statements except money from the group’s own members (members are not named), on both sides.
   - The three government briefs (United States, Texas, New Mexico) carry no such statement.
 - New `npm run fetch:amicus-lda`: each amicus organization's own federal lobbying in 2025–26 from the Senate LDA (strict name matching incl. "U.S.A." forms; unit-tested). Largest: U.S. Chamber $123.47M in-house + $0.64M outside; American Association for Justice $10.8M + $1.55M; CropLife America $4.75M + $0.28M. No filing lists Bayer or Monsanto as an "affiliated organization". Groups not found may report under another name.
 - Not available from these records: overall donors of nonprofits (generally not public).
