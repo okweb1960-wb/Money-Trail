@@ -240,6 +240,17 @@ model AmicusBrief {
   ldaOutside        Float?
   ldaYears          String?
   ldaExample        String?
+  // The filer's IRS Form 990 (latest year with data), via ProPublica Nonprofit Explorer
+  irsStatus         String? // matched | ambiguous | not_found
+  irsEin            String?
+  irsName           String?
+  irsSubsection     Int?
+  irsTaxYear        Int?
+  irsRevenue        Float?
+  irsContributions  Float?
+  irsProgramRevenue Float?
+  irsPdf            String?
+  irsOrgPage        String?
   sourceUrl   String
   retrievedAt DateTime
 }

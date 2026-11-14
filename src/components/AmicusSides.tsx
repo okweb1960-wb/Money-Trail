@@ -52,8 +52,78 @@ function Row({ r }: { r: AmicusRow }) {
             )}
           </p>
         )}
+        {r.filerKind === "organization" && <IrsLine r={r} />}
       </details>
     </li>
+  );
+}
+
+// IRS tax-exempt types, by Internal Revenue Code section 501(c) paragraph.
+export const SUBSECTION: Record<number, string> = {
+  3: "501(c)(3) charity",
+  4: "501(c)(4) social welfare group",
+  5: "501(c)(5) labor or agricultural organization",
+  6: "501(c)(6) business league / trade association",
+};
+
+function IrsLine({ r }: { r: AmicusRow }) {
+  if (r.irsStatus === "matched" && r.irsRevenue != null) {
+    return (
+      <p className="mt-1 pl-3 text-ink-2">
+        IRS Form 990, tax year {r.irsTaxYear} ({r.irsName}{r.irsSubsection ? `, ${SUBSECTION[r.irsSubsection] ?? `501(c)(${r.irsSubsection})`}` : ""}): total revenue {usd(r.irsRevenue)}, of which contributions and grants {usd(r.irsContributions ?? 0)} and program-service revenue (which can include member dues) {usd(r.irsProgramRevenue ?? 0)}.{" "}
+        {r.irsPdf && <a href={r.irsPdf} target="_blank" rel="noopener noreferrer">990 PDF ↗</a>}{" "}
+        {r.irsOrgPage && <a href={r.irsOrgPage} target="_blank" rel="noopener noreferrer">all filings ↗</a>}{" "}
+        Donor names are not public on Form 990.
+      </p>
+    );
+  }
+  return (
+    <p className="mt-1 pl-3 text-ink-2">
+      IRS Form 990: {r.irsStatus === "ambiguous" ? "several IRS entities share this exact name, so none is shown." : "no IRS filer found under this exact name (it may file under a different legal name, or be a coalition)."}
+    </p>
+  );
+}
+
+/** Finances (latest Form 990) of organizations that filed, side by side. */
+export function IrsSummary({ rows, petitioner, respondent }: { rows: AmicusRow[]; petitioner: string; respondent: string }) {
+  const seen = new Set<string>();
+  const orgs = rows.filter((r) => r.filerKind === "organization" && r.irsStatus === "matched" && r.irsEin && (r.side === "petitioner" || r.side === "respondent") && !seen.has(r.irsEin + r.side) && seen.add(r.irsEin + r.side));
+  const table = (side: string, title: string) => {
+    const rs = orgs.filter((r) => r.side === side).sort((a, b) => (b.irsRevenue ?? 0) - (a.irsRevenue ?? 0));
+    return (
+      <div className="overflow-x-auto rounded-lg border border-line bg-surface p-3">
+        <h4 className="font-semibold">{title}</h4>
+        <table className="mt-2 w-full text-left text-xs tabular">
+          <thead className="text-ink-2"><tr><th className="py-1 pr-2">Organization</th><th className="pr-2">Type</th><th className="pr-2 text-right">Revenue</th><th className="pr-2 text-right">Contributions &amp; grants</th><th className="pr-2 text-right">Program revenue</th><th>990</th></tr></thead>
+          <tbody>
+            {rs.map((r) => (
+              <tr key={r.id} className="border-t border-line align-top">
+                <td className="py-1 pr-2">{r.filer}</td>
+                <td className="whitespace-nowrap pr-2 text-ink-2">{r.irsSubsection ? `501(c)(${r.irsSubsection})` : ""}</td>
+                <td className="pr-2 text-right">{usd(r.irsRevenue ?? 0)}</td>
+                <td className="pr-2 text-right">{usd(r.irsContributions ?? 0)}</td>
+                <td className="pr-2 text-right">{usd(r.irsProgramRevenue ?? 0)}</td>
+                <td className="whitespace-nowrap">{(r.irsPdf ?? r.irsOrgPage) && <a href={(r.irsPdf ?? r.irsOrgPage)!} target="_blank" rel="noopener noreferrer">{r.irsTaxYear} ↗</a>}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+  if (!orgs.length) return null;
+  return (
+    <div className="mt-6">
+      <p className="text-sm font-semibold">Finances of the organizations that filed (IRS Form 990, most recent year available)</p>
+      <p className="mt-1 max-w-3xl text-xs text-muted">
+        Form 990 shows how much an organization takes in and what kind of income it is. It does not show donor names, which are withheld from public copies for most organizations, and it does not show what any money was used for in this case.
+        &ldquo;Program revenue&rdquo; often includes membership dues for trade associations.
+      </p>
+      <div className="mt-2 grid gap-3 lg:grid-cols-2">
+        {table("petitioner", `Supporting ${petitioner} (petitioner)`)}
+        {table("respondent", `Supporting ${respondent} (respondent)`)}
+      </div>
+    </div>
   );
 }
 
@@ -116,6 +186,7 @@ export function AmicusSides({ rows, petitioner, respondent }: { rows: AmicusRow[
         </>
       )}
       <p className="mt-3 text-xs text-muted">Briefs filed by individual people are counted but not named, because this site names only public officials and registered lobbyists. Their briefs are on the Supreme Court docket.</p>
+      <IrsSummary rows={rows} petitioner={petitioner} respondent={respondent} />
     </div>
   );
 }

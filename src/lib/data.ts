@@ -163,6 +163,8 @@ export interface AmicusRow {
   id: string; filer: string; filerKind: string; stage: string; filedOn: string; side: string; sidePhrase: string | null;
   disclosure: string | null; partyCounselDenied: boolean | null; membersExcepted: boolean | null; partyMentions: string[]; counselOverlap: string[];
   ldaInHouse: number | null; ldaOutside: number | null; ldaYears: string | null; ldaExample: string | null;
+  irsStatus: string | null; irsEin: string | null; irsName: string | null; irsSubsection: number | null; irsTaxYear: number | null;
+  irsRevenue: number | null; irsContributions: number | null; irsProgramRevenue: number | null; irsPdf: string | null; irsOrgPage: string | null;
   sourceUrl: string; retrievedAt: string;
 }
 
@@ -176,6 +178,8 @@ export async function getAmicusBriefs(): Promise<{ rows: AmicusRow[]; petitioner
       id: r.id, filer: r.filer, filerKind: r.filerKind, stage: r.stage, filedOn: day(r.filedOn), side: r.side, sidePhrase: r.sidePhrase,
       disclosure: r.disclosure, partyCounselDenied: r.partyCounselDenied, membersExcepted: r.membersExcepted, partyMentions: JSON.parse(r.partyMentions), counselOverlap: JSON.parse(r.counselOverlap),
       ldaInHouse: r.ldaInHouse, ldaOutside: r.ldaOutside, ldaYears: r.ldaYears, ldaExample: r.ldaExample,
+      irsStatus: r.irsStatus, irsEin: r.irsEin, irsName: r.irsName, irsSubsection: r.irsSubsection, irsTaxYear: r.irsTaxYear,
+      irsRevenue: r.irsRevenue, irsContributions: r.irsContributions, irsProgramRevenue: r.irsProgramRevenue, irsPdf: r.irsPdf, irsOrgPage: r.irsOrgPage,
       sourceUrl: r.sourceUrl, retrievedAt: r.retrievedAt.toISOString(),
     })),
     petitioner: info?.petitioner ?? "Petitioner",

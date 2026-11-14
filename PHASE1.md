@@ -111,3 +111,10 @@ All flags are worded "worth a closer look" and show their baseline and evidence 
   - The three government briefs (United States, Texas, New Mexico) carry no such statement.
 - New `npm run fetch:amicus-lda`: each amicus organization's own federal lobbying in 2025–26 from the Senate LDA (strict name matching incl. "U.S.A." forms; unit-tested). Largest: U.S. Chamber $123.47M in-house + $0.64M outside; American Association for Justice $10.8M + $1.55M; CropLife America $4.75M + $0.28M. No filing lists Bayer or Monsanto as an "affiliated organization". Groups not found may report under another name.
 - Not available from these records: overall donors of nonprofits (generally not public).
+
+## Update 2026-11-14 (b): IRS Form 990 data for amicus organizations
+
+- New source (approved): IRS Form 990 e-file data via ProPublica Nonprofit Explorer (`npm run fetch:990`, host projects.propublica.org). Strict name matching (unit-tested): shown only when exactly one IRS filer has the same name.
+- Matched 13 of 21 organizations. Not matched: Veterans of Foreign Wars (19 IRS entities share the name), coalitions/non-organizations (National Agricultural Associations, Farm Bureau Organizations of California et al., Farmer and Farmworker Groups, Roundup and Paraquat MDL Leadership), and groups filing under another legal name (Farmworker Justice, Heartland Health Research Alliance, Local Government Legal Center).
+- Most recent year with data (2023), total revenue — supporting Monsanto: U.S. Chamber $196.5M (contributions & grants $182.5M), American Farm Bureau Federation $37.3M, CropLife America $18.0M (program revenue $17.0M), ATRA $4.8M, Agricultural Retailers Assn $4.0M, American Free Enterprise Chamber $2.0M, Retail Litigation Center $1.2M, Atlantic Legal Foundation $0.3M. Supporting Durnell: American Association for Justice $29.1M, Children's Health Defense $16.1M, Public Citizen $5.7M, Center for Food Safety $3.0M, Stand for Health Freedom $0.3M.
+- Shown in each organization's "Who wrote and funded it" panel and in a side-by-side finances table. Donor names are not public on Form 990; this is stated wherever the figures appear.

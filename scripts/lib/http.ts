@@ -62,6 +62,8 @@ export async function fetchJson<T = any>(url: string, opts: FetchOpts = {}): Pro
       };
     } catch (e) {
       lastErr = e;
+      // Client errors other than 429 (e.g. 404 "no results") will not change on retry.
+      if (/^HTTP 4(?!29)\d\d /.test((e as Error).message)) break;
       if (attempt < retries) {
         stats.retries++;
         const wait = 2 ** attempt * 2000;

@@ -229,6 +229,13 @@ async function main() {
   } catch {
     warn.push("data/raw/lda/amicus-orgs.json missing — run npm run fetch:amicus-lda");
   }
+  // IRS Form 990 data for amicus organizations (data/raw/irs990/amicus-orgs.json, from npm run fetch:990)
+  let irs990: any[] = [];
+  try {
+    irs990 = readRaw<any[]>("irs990/amicus-orgs.json").data;
+  } catch {
+    warn.push("data/raw/irs990/amicus-orgs.json missing — run npm run fetch:990");
+  }
 
   // ---------- Officials ----------
   const officialDecision = new Map<string, string>();
@@ -311,6 +318,16 @@ async function main() {
         ...(() => {
           const o = filerKind === "organization" ? amicusLda.find((a) => a.filer === x.filer) : undefined;
           return o && o.filingsFound > 0 ? { ldaInHouse: o.reportedInHouseExpenses, ldaOutside: o.outsideFirmIncome ?? 0, ldaYears: o.years.join("–"), ldaExample: o.exampleFiling } : {};
+        })(),
+        ...(() => {
+          const g = filerKind === "organization" ? irs990.find((a) => a.filer === x.filer) : undefined;
+          if (!g) return {};
+          if (g.status !== "matched" || !g.latest) return { irsStatus: g.status };
+          return {
+            irsStatus: "matched", irsEin: String(g.ein), irsName: g.name, irsSubsection: g.subsection ?? null, irsTaxYear: g.latest.taxYear,
+            irsRevenue: g.latest.totalRevenue, irsContributions: g.latest.contributionsAndGrants, irsProgramRevenue: g.latest.programServiceRevenue,
+            irsPdf: g.latest.pdfUrl, irsOrgPage: g.orgPage,
+          };
         })(),
         sourceUrl: x.url, retrievedAt: d(x.retrieved_at),
       } });

@@ -28,7 +28,8 @@
     "test": "tsx --test src/lib/*.test.ts scripts/fetch/*.test.ts",
     "lint:copy": "tsx scripts/lint-copy.ts",
     "postinstall": "prisma generate",
-    "fetch:amicus-lda": "tsx scripts/fetch/amicus-lda.ts"
+    "fetch:amicus-lda": "tsx scripts/fetch/amicus-lda.ts",
+    "fetch:990": "tsx scripts/fetch/irs990.ts"
   },
   "devDependencies": {
     "@tailwindcss/turbopack": "4.3.3",
